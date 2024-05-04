@@ -1,14 +1,11 @@
 {
-  "name": "Silverbullet Webclipper",
-  "version": "0.1",
-  "manifest_version": 3,
-  "description": "Creates a new page in the Inbox and either adds the web page link or the selected content",
-  "background": {
-    "service_worker": "js/background.js"
-  },
-  "action": {},
-  "permissions": ["activeTab", "scripting"],
-  "host_permissions": [
-    "*://sbtest.burke.chat/"
-  ]
+    "name": "Silverbullet Webclipper",
+    "version": "0.1",
+    "manifest_version": 3,
+    "description": "Creates a new page in the Inbox and either adds the web page link or the selected content",
+    "background": {
+        "service_worker": "js/background.js"
+    },
+    "action": {},
+    "permissions": ["activeTab", "scripting"]
 }

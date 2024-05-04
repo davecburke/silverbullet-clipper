@@ -36,24 +36,29 @@ function sendDataToAPI(url, text) {
     - List item 2
     - List item 3
     `;
-    fetch('https://sbtest.burke.chat/Inbox/test24.md', {
+    const endpoint = 'https://sbtest.burke.chat/Inbox/' + encodeURIComponent(getDatetimeStamp(new Date()))  + '.md';
+    const requestOptions = {
         method: 'PUT',
         headers: {
             'Content-Type': 'text/markdown',
             'Authorization': 'Bearer 1234'
         },
         body: markdownText,
-    })
+    };
+    fetch(endpoint, requestOptions)
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
     })
     .then(data => {
-        throw new Error(data)
-        console.log('Response from API:', data);
+        console.log('Response:', data);
     })
     .catch(error => {
-        console.error('Error sending data to API:', error);
+        console.log('Error sending data to API:', error);
     });
+}
+
+function getDatetimeStamp(datetime) {
+    return datetime.getFullYear().toString() + '-' + (datetime.getMonth() + 1).toString().padStart(2,'0') + '-' + datetime.getDate().toString().padStart(2,'0') + ' ' + datetime.getHours().toString().padStart(2,'0') + ":" + datetime.getMinutes().toString().padStart(2,'0') + ':' + datetime.getSeconds().toString().padStart(2,'0');
 }
