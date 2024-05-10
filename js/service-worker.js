@@ -103,6 +103,35 @@ async function hasDocument() {
     return false;
 }
 
+// Function to wait for the tab to be fully loaded
+function waitForTabLoad(tabId, timestamp, endpoint) {
+    chrome.tabs.onUpdated.addListener(function listener(updatedTabId, changeInfo) {
+        if (updatedTabId === tabId && changeInfo.status === "complete") {
+            // Tab has finished loading, send the link data
+            //sendLinkData(tabId, timestamp, endpoint);
+            chrome.tabs.sendMessage(tabId, {
+                action: "displayLink",
+                data: {
+                    text: timestamp,
+                    url: endpoint
+                }
+            });
+            // Remove the listener
+            chrome.tabs.onUpdated.removeListener(listener);
+        }
+    });
+}
+
+function sendLinkData(tabId, timestamp, endpoint) {
+    chrome.tabs.sendMessage(tabId, {
+        action: "displayLink",
+        data: {
+            text: timestamp,
+            url: endpoint
+        }
+    });
+}
+
 function sendDataToAPI(markdown) {
     chrome.storage.sync.get(["hostURL", "token"], (items) => {
         if (!items.hostURL || !items.token) {
@@ -125,6 +154,41 @@ function sendDataToAPI(markdown) {
                     throw new Error('Network response was not ok');
                 } else {
                     //Show link to new page
+                    chrome.windows.create({
+                        type: "popup",
+                        url: LINK_PATH, // Adjust the URL according to your file structure
+                        width: 300,
+                        height: 150
+                    }, (linkWindow) => {
+                        // Wait for the popup window to be fully created
+                        waitForTabLoad(linkWindow.tabs[0].id, timestamp, endpoint);
+                    });
+                    // chrome.windows.create({
+                    //     type: "popup",
+                    //     url: LINK_PATH,
+                    //     width: 200,
+                    //     height: 150
+                    // });
+                    
+                    // chrome.windows.create({
+                    //     type: "popup",
+                    //     url: LINK_PATH,
+                    //     width: 200,
+                    //     height: 150
+                    // }, (window) => {
+                    //     chrome.tabs.query({active: true, windowId: window.id}, (tabs) => {
+                    //         chrome.tabs.sendMessage(tabs[0].id, {
+                    //             action: "displayLink",
+                    //             data: {
+                    //                 text: items.hostURL + '/Inbox/' + timestamp  + '.md',
+                    //                 url: endpoint
+                    //             }
+                    //         });
+                    //     });
+                    // });
+
+                      
+                    
                     console.log('service-worker.js: Line 127 - endpoint',endpoint);
                     console.log('service-worker.js: Line 129 - print', items.hostURL + '/Inbox/' + timestamp  + '.md');
 
