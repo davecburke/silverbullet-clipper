@@ -157,14 +157,19 @@ function sendDataToAPI(markdown, title) {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 } else {
-                    chrome.windows.create({
-                        type: "popup",
-                        url: LINK_PATH,
-                        width: 300,
-                        height: 150
-                    }, (linkWindow) => {
-                        waitForTabLoad(linkWindow.tabs[0].id, title, endpoint);
+                    chrome.runtime.sendMessage({
+                        type: 'link',
+                        target: 'popup',
+                        url: endpoint
                     });
+                    // chrome.windows.create({
+                    //     type: "popup",
+                    //     url: LINK_PATH,
+                    //     width: 300,
+                    //     height: 150
+                    // }, (linkWindow) => {
+                    //     waitForTabLoad(linkWindow.tabs[0].id, title, endpoint);
+                    // });
                 }
             })
             .then(data => {

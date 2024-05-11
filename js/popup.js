@@ -1,17 +1,18 @@
-// chrome.runtime.onMessage.addListener(handleMessages);
-// async function handleMessages(message) {
-//     if (message.target !== 'popup') {
-//         return false;
-//     }
-//     switch (message.type) {
-//         case 'configure':
-//             convertToMarkdown(message.data,message.url);
-//             break;
-//         default:
-//         console.warn(`Unexpected message type received: '${message.type}'.`);
-//         return false;
-//     }
-// }
+chrome.runtime.onMessage.addListener(handleMessages);
+async function handleMessages(message) {
+    if (message.target !== 'popup') {
+        return false;
+    }
+    switch (message.type) {
+        case 'link':
+            const linkSpan = document.getElementById("link");
+            linkSpan.innerHTML = '<a href="' + message.url + '" target="_blank">Go to Quick Note</a>';
+            break;
+        default:
+        console.warn(`Unexpected message type received: '${message.type}'.`);
+        return false;
+    }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     const saveButton = document.getElementById("save");
