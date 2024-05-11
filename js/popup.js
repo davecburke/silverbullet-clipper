@@ -26,7 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const captureButton = document.getElementById("capture");
     captureButton.addEventListener("click", () => {
-        sendToBackground('capture');
+        const title = document.getElementById("title").value;
+        const tags = document.getElementById("tags").value;
+        let data = {'title': title, 'tags': tags};
+        sendToBackground('capture',data);
     });
 
     const closeButton = document.getElementById("close");
@@ -86,6 +89,7 @@ function getDatetimeStamp(datetime) {
 function sendToBackground(type, data) {
     chrome.runtime.sendMessage({
         type,
-        target: 'background'
+        target: 'service-worker',
+        data
     });
 }

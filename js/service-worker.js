@@ -34,7 +34,7 @@ async function getTextFromSelection(tabId) {
     });
 }
 
-async function sendMessageToOffscreenDocument(type, data, url) {
+async function sendMessageToOffscreenDocument(type, data, url, title, tags) {
     if (!(await hasDocument())) {
         await chrome.offscreen.createDocument({
             url: OFFSCREEN_DOCUMENT_PATH,
@@ -46,30 +46,33 @@ async function sendMessageToOffscreenDocument(type, data, url) {
         type,
         target: 'offscreen',
         data,
-        url
+        url,
+        title,
+        tags
     });
 }
 
 chrome.runtime.onMessage.addListener(handleMessages);
 
 async function handleMessages(message) {
-    if (message.target !== 'background') {
+    if (message.target !== 'service-worker') {
         return;
     }
     switch (message.type) {
         case 'convert-to-markdown-result':
-            handleConvertToMarkdownResult(message.data);
+            handleConvertToMarkdownResult(message.data, message.title);
             closeOffscreenDocument();
             break;
         case 'capture':
-            captureTab();
+            console.log('service-worker.js: Line 67 - message',JSON.stringify(message));
+            captureTab(message.data.title, message.data.tags);
             break;            
         default:
         console.warn(`Unexpected message type received: '${message.type}'.`);
     }
 }
 
-async function captureTab() {
+async function captureTab(title, tags) {
     let queryOptions = { active: true, lastFocusedWindow: true };
     let [tab] = await chrome.tabs.query(queryOptions);
     const url = tab.url;
@@ -77,13 +80,16 @@ async function captureTab() {
         sendMessageToOffscreenDocument(
             'convert-to-markdown',
             text,
-            url
+            url,
+            title,
+            tags
         );
 }
 
-async function handleConvertToMarkdownResult(markdown) {
-    sendDataToAPI(markdown)
+async function handleConvertToMarkdownResult(markdown, title) {
+    sendDataToAPI(markdown, title)
     console.log('Received markdown\n\n', markdown);
+    console.log('Received title', title);
 }
 
 async function closeOffscreenDocument() {
@@ -130,14 +136,14 @@ function sendLinkData(tabId, timestamp, endpoint) {
     });
 }
 
-function sendDataToAPI(markdown) {
+function sendDataToAPI(markdown, title) {
     chrome.storage.sync.get(["hostURL", "token"], (items) => {
         if (!items.hostURL || !items.token) {
             console.log("Username or password is not saved. Opening options page...");
             chrome.tabs.create({ url: CONFIG_PATH });
         } else {
-            let timestamp = getDatetimeStamp(new Date());
-            const endpoint = items.hostURL + '/Inbox/' + encodeURIComponent(timestamp)  + '.md';
+            // let timestamp = getDatetimeStamp(new Date());
+            const endpoint = items.hostURL + '/Inbox/' + encodeURIComponent(title)  + '.md';
             const requestOptions = {
                 method: 'PUT',
                 headers: {
@@ -157,7 +163,7 @@ function sendDataToAPI(markdown) {
                         width: 300,
                         height: 150
                     }, (linkWindow) => {
-                        waitForTabLoad(linkWindow.tabs[0].id, timestamp, endpoint);
+                        waitForTabLoad(linkWindow.tabs[0].id, title, endpoint);
                     });
                 }
             })

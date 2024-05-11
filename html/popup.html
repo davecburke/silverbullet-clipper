@@ -54,8 +54,9 @@
                     <fieldset>
                         <label for="title">Title</label>
                         <input type="text" id="title">
-                        <label for="tag">Tag</label>
-                        <input type="text" id="tag">
+                        <label for="tags">Tags</label>
+                        <input type="text" id="tags">
+                        <span class="pure-form-message">Separate tags by space</span>
                     </fieldset>
                 </form>
             </p>
@@ -71,8 +72,10 @@
                     <fieldset>
                         <label for="hostURL">Host URL</label>
                         <input type="text" id="hostURL">
+                        <span class="pure-form-message">eg. http(s)://silverbullet.mydomain.com:3000</span>
                         <label for="token">Token</label>
                         <input type="password" id="token">
+                        <span class="pure-form-message">The token is set in the environment variable SB_AUTH_TOKEN</span>
                     </fieldset>
                 </form>
             </p>

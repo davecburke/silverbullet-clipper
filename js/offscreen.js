@@ -5,7 +5,7 @@ async function handleMessages(message) {
     }
     switch (message.type) {
         case 'convert-to-markdown':
-            convertToMarkdown(message.data,message.url);
+            convertToMarkdown(message.data, message.url, message.title, message.tags);
             break;
         default:
         console.warn(`Unexpected message type received: '${message.type}'.`);
@@ -13,24 +13,38 @@ async function handleMessages(message) {
     }
 }
 
-function convertToMarkdown(htmlString, url) {
+function convertToMarkdown(htmlString, url, title, tags) {
     var turndownService = new TurndownService();
     var markdown;
+    var tagsMarkdown = '';
+    if(tags != null && tags != '') {
+        tagsMarkdown = '<p>';
+        tags.split(' ').forEach((item) => {
+            if(item.startsWith('#')) {
+                tagsMarkdown += item + ' ';
+            } else {
+                tagsMarkdown += '#' + item + ' ';
+            }
+        });
+        tagsMarkdown += '</p>'
+    }
     if(htmlString != null) {
-        markdown = turndownService.turndown(htmlString + '<p>source: <a href="' + url + '" target="_blank">' + url + '</a></p>');
+        markdown = turndownService.turndown(tagsMarkdown + htmlString + '<p>source: <a href="' + url + '" target="_blank">' + url + '</a></p>');
     } else {
         markdown = url
     }
     sendToBackground(
         'convert-to-markdown-result',
-        markdown
+        markdown,
+        title
     );
 }
 
-function sendToBackground(type, data) {
+function sendToBackground(type, data, title) {
     chrome.runtime.sendMessage({
         type,
-        target: 'background',
-        data
+        target: 'service-worker',
+        data,
+        title
     });
 }
