@@ -109,40 +109,12 @@ async function hasDocument() {
     return false;
 }
 
-// Function to wait for the tab to be fully loaded
-function waitForTabLoad(tabId, timestamp, endpoint) {
-    chrome.tabs.onUpdated.addListener(function listener(updatedTabId, changeInfo) {
-        if (updatedTabId === tabId && changeInfo.status === "complete") {
-            chrome.tabs.sendMessage(tabId, {
-                action: "displayLink",
-                data: {
-                    text: timestamp,
-                    url: endpoint
-                }
-            });
-            // Remove the listener
-            chrome.tabs.onUpdated.removeListener(listener);
-        }
-    });
-}
-
-function sendLinkData(tabId, timestamp, endpoint) {
-    chrome.tabs.sendMessage(tabId, {
-        action: "displayLink",
-        data: {
-            text: timestamp,
-            url: endpoint
-        }
-    });
-}
-
 function sendDataToAPI(markdown, title) {
     chrome.storage.sync.get(["hostURL", "token"], (items) => {
         if (!items.hostURL || !items.token) {
             console.log("Username or password is not saved. Opening options page...");
             chrome.tabs.create({ url: CONFIG_PATH });
         } else {
-            // let timestamp = getDatetimeStamp(new Date());
             const endpoint = items.hostURL + '/Inbox/' + encodeURIComponent(title)  + '.md';
             const requestOptions = {
                 method: 'PUT',
@@ -162,14 +134,6 @@ function sendDataToAPI(markdown, title) {
                         target: 'popup',
                         url: endpoint
                     });
-                    // chrome.windows.create({
-                    //     type: "popup",
-                    //     url: LINK_PATH,
-                    //     width: 300,
-                    //     height: 150
-                    // }, (linkWindow) => {
-                    //     waitForTabLoad(linkWindow.tabs[0].id, title, endpoint);
-                    // });
                 }
             })
             .then(data => {
@@ -180,8 +144,4 @@ function sendDataToAPI(markdown, title) {
             });
         }
     });
-}
-
-function getDatetimeStamp(datetime) {
-    return datetime.getFullYear().toString() + '-' + (datetime.getMonth() + 1).toString().padStart(2,'0') + '-' + datetime.getDate().toString().padStart(2,'0') + ' ' + datetime.getHours().toString().padStart(2,'0') + ":" + datetime.getMinutes().toString().padStart(2,'0') + ':' + datetime.getSeconds().toString().padStart(2,'0');
 }
