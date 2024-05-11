@@ -1,18 +1,6 @@
 const OFFSCREEN_DOCUMENT_PATH = '/html/offscreen.html';
-const CONFIG_PATH = '/html/config.html';
-const LINK_PATH = '/html/link.html';
-const POPUP_PATH = '/html/popup.html';
 
-chrome.action.onClicked.addListener(async (tab) => {
-    chrome.storage.sync.get(["hostURL", "token"], (items) => {
-        if (!items.hostURL || !items.token) {
-            chrome.tabs.create({ url: CONFIG_PATH });
-        } else {
-            chrome.tabs.create({ url: POPUP_PATH });
-        }
-    });
-});
-
+/* Get the selected text from the tab */
 async function getTextFromSelection(tabId) {
     return new Promise((resolve, reject) => {
         chrome.scripting.executeScript({
@@ -34,6 +22,7 @@ async function getTextFromSelection(tabId) {
     });
 }
 
+/* Use an offscreen document to parse the captured DOM */
 async function sendMessageToOffscreenDocument(type, data, url, title, tags) {
     if (!(await hasDocument())) {
         await chrome.offscreen.createDocument({
@@ -52,19 +41,20 @@ async function sendMessageToOffscreenDocument(type, data, url, title, tags) {
     });
 }
 
+/* Listener for service worker */
 chrome.runtime.onMessage.addListener(handleMessages);
-
 async function handleMessages(message) {
     if (message.target !== 'service-worker') {
         return;
     }
     switch (message.type) {
         case 'convert-to-markdown-result':
-            handleConvertToMarkdownResult(message.data, message.title);
+            //Send the markdown via the API
+            sendCaptureToEndpoint(message.data, message.title);
             closeOffscreenDocument();
             break;
         case 'capture':
-            console.log('service-worker.js: Line 67 - message',JSON.stringify(message));
+            //Capture the user selection
             captureTab(message.data.title, message.data.tags);
             break;            
         default:
@@ -72,10 +62,12 @@ async function handleMessages(message) {
     }
 }
 
+/* Capture the the tab URL and any selected HTML */
 async function captureTab(title, tags) {
     let queryOptions = { active: true, lastFocusedWindow: true };
     let [tab] = await chrome.tabs.query(queryOptions);
     const url = tab.url;
+    //Get the selected HTML form the tab and then send to the offscreen document for parsing
     const text = await getTextFromSelection(tab.id);
         sendMessageToOffscreenDocument(
             'convert-to-markdown',
@@ -86,12 +78,7 @@ async function captureTab(title, tags) {
         );
 }
 
-async function handleConvertToMarkdownResult(markdown, title) {
-    sendDataToAPI(markdown, title)
-    console.log('Received markdown\n\n', markdown);
-    console.log('Received title', title);
-}
-
+/* Close the offscreen document */
 async function closeOffscreenDocument() {
     if (!(await hasDocument())) {
         return;
@@ -99,6 +86,7 @@ async function closeOffscreenDocument() {
     await chrome.offscreen.closeDocument();
 }
 
+/* Check if the offscreen document has been created */
 async function hasDocument() {
     const matchedClients = await clients.matchAll();
     for (const client of matchedClients) {
@@ -109,39 +97,36 @@ async function hasDocument() {
     return false;
 }
 
-function sendDataToAPI(markdown, title) {
+/* Send the markdown to the Silverbullet endpoint */
+function sendCaptureToEndpoint(markdown, title) {
     chrome.storage.sync.get(["hostURL", "token"], (items) => {
-        if (!items.hostURL || !items.token) {
-            console.log("Username or password is not saved. Opening options page...");
-            chrome.tabs.create({ url: CONFIG_PATH });
-        } else {
-            const endpoint = items.hostURL + '/Inbox/' + encodeURIComponent(title)  + '.md';
-            const requestOptions = {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'text/markdown',
-                    'Authorization': 'Bearer ' + items.token
-                },
-                body: markdown,
-            };
-            fetch(endpoint, requestOptions)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                } else {
-                    chrome.runtime.sendMessage({
-                        type: 'link',
-                        target: 'popup',
-                        url: endpoint
-                    });
-                }
-            })
-            .then(data => {
-                console.log('Response:', data);
-            })
-            .catch(error => {
-                console.log('Error sending data to API:', error);
-            });
-        }
+        const endpoint = items.hostURL + '/Inbox/' + encodeURIComponent(title)  + '.md';
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'text/markdown',
+                'Authorization': 'Bearer ' + items.token
+            },
+            body: markdown,
+        };
+        fetch(endpoint, requestOptions)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            } else {
+                //Update the link span on the popup to show a link to the new Quick Note
+                chrome.runtime.sendMessage({
+                    type: 'link',
+                    target: 'popup',
+                    url: endpoint
+                });
+            }
+        })
+        .then(data => {
+            console.log('Response:', data);
+        })
+        .catch(error => {
+            console.log('Error sending data to API:', error);
+        });
     });
 }

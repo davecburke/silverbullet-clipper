@@ -1,3 +1,4 @@
+/* Listener for the popup */
 chrome.runtime.onMessage.addListener(handleMessages);
 async function handleMessages(message) {
     if (message.target !== 'popup') {
@@ -5,6 +6,7 @@ async function handleMessages(message) {
     }
     switch (message.type) {
         case 'link':
+            //Display the link to the new Quick Note
             const linkSpan = document.getElementById("link");
             linkSpan.innerHTML = '<a href="' + message.url + '" target="_blank">Go to Quick Note</a>';
             break;
@@ -14,7 +16,9 @@ async function handleMessages(message) {
     }
 }
 
+/* On document load */
 document.addEventListener("DOMContentLoaded", () => {
+    //Credentials save button event
     const saveButton = document.getElementById("save");
     saveButton.addEventListener("click", () => {
         const hostURL = document.getElementById("hostURL").value;
@@ -24,40 +28,51 @@ document.addEventListener("DOMContentLoaded", () => {
             showCapture();
         });
     });
-    
+    //Capture button event
     const captureButton = document.getElementById("capture");
     captureButton.addEventListener("click", () => {
         const title = document.getElementById("title").value;
         const tags = document.getElementById("tags").value;
         let data = {'title': title, 'tags': tags};
-        sendToBackground('capture',data);
+        //Tell the service worker to capture the tab
+        sendToServiceWorker('capture',data);
     });
-
+    //Credentials close button event
     const closeButton = document.getElementById("close");
     closeButton.addEventListener("click", () => {
         hideConfigure();
         showCapture();
     });
-
+    //Configure button event
     const configureButton = document.getElementById("configure");
     configureButton.addEventListener("click", () => {
         hideCapture();
         showConfigure();
     });
     displayTitle();
+    //Prompt to provide credentials if they are missing
+    chrome.storage.sync.get(["hostURL", "token"], (items) => {
+        if(items === null || items.hostURL === null || items.hostURL === '' ||items.token === null || items.token === '') {
+            hideCapture();
+            showConfigure();
+        }
+    });
 });
 
+/* Show the configure article */
 function showConfigure() {
     var configure = document.getElementById("articleConfigure");
     if (configure.classList.contains("hidden")) {
         configure.classList.remove("hidden");
     }
+    //Get the hostURL and token from storage
     chrome.storage.sync.get(["hostURL", "token"], (items) => {
         document.getElementById('hostURL').value = items?.hostURL || '';
         document.getElementById('token').value = items?.token || '';
     });
 }
 
+/* Hide the configure article */
 function hideConfigure() {
     var configure = document.getElementById("articleConfigure");
     if (!configure.classList.contains("hidden")) {
@@ -65,6 +80,7 @@ function hideConfigure() {
     }
 }
 
+/* Show the capture article */
 function showCapture() {
     var capture = document.getElementById("articleCapture");
     if (capture.classList.contains("hidden")) {
@@ -72,6 +88,7 @@ function showCapture() {
     }
 }
 
+/* Hide the capture article */
 function hideCapture() {
     var capture = document.getElementById("articleCapture");
     if (!capture.classList.contains("hidden")) {
@@ -79,15 +96,18 @@ function hideCapture() {
     }
 }
 
+/* Display the default timestamp title */
 function displayTitle() {
     document.getElementById('title').value = getDatetimeStamp(new Date());
 }
 
+/* Get the current timestamp */
 function getDatetimeStamp(datetime) {
     return datetime.getFullYear().toString() + '-' + (datetime.getMonth() + 1).toString().padStart(2,'0') + '-' + datetime.getDate().toString().padStart(2,'0') + ' ' + datetime.getHours().toString().padStart(2,'0') + ":" + datetime.getMinutes().toString().padStart(2,'0') + ':' + datetime.getSeconds().toString().padStart(2,'0');
 }
 
-function sendToBackground(type, data) {
+/* Send a message to the service worker */
+function sendToServiceWorker(type, data) {
     chrome.runtime.sendMessage({
         type,
         target: 'service-worker',
