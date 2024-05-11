@@ -7,6 +7,7 @@
         "service_worker": "js/service-worker.js"
     },
     "action": {
+        "default_popup": "html/popup.html",
         "default_icon": {
             "16": "images/icon16.png",
             "32": "images/icon32.png",

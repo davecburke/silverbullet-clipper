@@ -1,31 +1,16 @@
 const OFFSCREEN_DOCUMENT_PATH = '/html/offscreen.html';
 const CONFIG_PATH = '/html/config.html';
 const LINK_PATH = '/html/link.html';
-
-chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.sync.get(["hostURL", "token"], (items) => {
-        if (!items.hostURL || !items.token) {
-            console.log("Username or password is not saved. Opening options page...");
-            chrome.tabs.create({ url: CONFIG_PATH });
-        } else {
-            // chrome.storage.sync.set({ "hostURL": null, "token": null}, () => {
-            //     console.log("URL and token saved.");
-            //     window.close();
-            // });
-            console.log('service-worker.js: Line 10 - items.hostURL',items.hostURL);
-            console.log('service-worker.js: Line 11 - items.token',items.token);
-        }
-    });
-});
+const POPUP_PATH = '/html/popup.html';
 
 chrome.action.onClicked.addListener(async (tab) => {
-    const url = tab.url;
-    const text = await getTextFromSelection(tab.id);
-    sendMessageToOffscreenDocument(
-        'convert-to-markdown',
-        text,
-        url
-    );
+    chrome.storage.sync.get(["hostURL", "token"], (items) => {
+        if (!items.hostURL || !items.token) {
+            chrome.tabs.create({ url: CONFIG_PATH });
+        } else {
+            chrome.tabs.create({ url: POPUP_PATH });
+        }
+    });
 });
 
 async function getTextFromSelection(tabId) {
@@ -76,9 +61,24 @@ async function handleMessages(message) {
             handleConvertToMarkdownResult(message.data);
             closeOffscreenDocument();
             break;
+        case 'capture':
+            captureTab();
+            break;            
         default:
         console.warn(`Unexpected message type received: '${message.type}'.`);
     }
+}
+
+async function captureTab() {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    let [tab] = await chrome.tabs.query(queryOptions);
+    const url = tab.url;
+    const text = await getTextFromSelection(tab.id);
+        sendMessageToOffscreenDocument(
+            'convert-to-markdown',
+            text,
+            url
+        );
 }
 
 async function handleConvertToMarkdownResult(markdown) {
@@ -107,8 +107,6 @@ async function hasDocument() {
 function waitForTabLoad(tabId, timestamp, endpoint) {
     chrome.tabs.onUpdated.addListener(function listener(updatedTabId, changeInfo) {
         if (updatedTabId === tabId && changeInfo.status === "complete") {
-            // Tab has finished loading, send the link data
-            //sendLinkData(tabId, timestamp, endpoint);
             chrome.tabs.sendMessage(tabId, {
                 action: "displayLink",
                 data: {
@@ -153,45 +151,14 @@ function sendDataToAPI(markdown) {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 } else {
-                    //Show link to new page
                     chrome.windows.create({
                         type: "popup",
-                        url: LINK_PATH, // Adjust the URL according to your file structure
+                        url: LINK_PATH,
                         width: 300,
                         height: 150
                     }, (linkWindow) => {
-                        // Wait for the popup window to be fully created
                         waitForTabLoad(linkWindow.tabs[0].id, timestamp, endpoint);
                     });
-                    // chrome.windows.create({
-                    //     type: "popup",
-                    //     url: LINK_PATH,
-                    //     width: 200,
-                    //     height: 150
-                    // });
-                    
-                    // chrome.windows.create({
-                    //     type: "popup",
-                    //     url: LINK_PATH,
-                    //     width: 200,
-                    //     height: 150
-                    // }, (window) => {
-                    //     chrome.tabs.query({active: true, windowId: window.id}, (tabs) => {
-                    //         chrome.tabs.sendMessage(tabs[0].id, {
-                    //             action: "displayLink",
-                    //             data: {
-                    //                 text: items.hostURL + '/Inbox/' + timestamp  + '.md',
-                    //                 url: endpoint
-                    //             }
-                    //         });
-                    //     });
-                    // });
-
-                      
-                    
-                    console.log('service-worker.js: Line 127 - endpoint',endpoint);
-                    console.log('service-worker.js: Line 129 - print', items.hostURL + '/Inbox/' + timestamp  + '.md');
-
                 }
             })
             .then(data => {
@@ -202,8 +169,6 @@ function sendDataToAPI(markdown) {
             });
         }
     });
-    
-    
 }
 
 function getDatetimeStamp(datetime) {

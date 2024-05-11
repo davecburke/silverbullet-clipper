@@ -21,6 +21,21 @@
                 margin: 10px; /* margin outside the article */
                 padding: 5px; /* Padding inside the article */
             }
+            .float-right {
+                float: right;
+            }
+            .button-secondary {
+                color: white;
+                border-radius: 4px;
+                text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+            }
+            .button-secondary {
+                background: rgb(66, 184, 221);
+                /* this is a light blue */
+            }
+            .hidden {
+                display: none;
+            }
         </style>
     </head>
     <body>
@@ -29,10 +44,27 @@
                 <img src="../images/icon32.png" alt="Logo">
             </div>
             <div class="title">
-                <h3>Configuration</h3>
+                <h3>Silverbullet Clipper</h3>
             </div>
         </div>
-        <article>
+        <article id="articleCapture">
+            <header>Capture</header>
+            <p>
+                <form class="pure-form pure-form-stacked">
+                    <fieldset>
+                        <label for="title">Title</label>
+                        <input type="text" id="title">
+                        <label for="tag">Tag</label>
+                        <input type="text" id="tag">
+                    </fieldset>
+                </form>
+            </p>
+            <footer>
+                <button id="capture" type="submit" class="pure-button pure-button-primary">Capture</button>
+                <button id="configure" type="submit" class="pure-button button-secondary float-right">Configure</button>
+            </footer>
+        </article>
+        <article id="articleConfigure" class="hidden">
             <header>Credentials</header>
             <p>
                 <form class="pure-form pure-form-stacked">
@@ -46,8 +78,9 @@
             </p>
             <footer>
                 <button id="save" type="submit" class="pure-button pure-button-primary">Save</button>
+                <button id="close" type="submit" class="pure-button button-secondary float-right">Close</button>
             </footer>
         </article>
     </body>
-    <script src="../js/config.js" type="module"></script>    
+    <script src="../js/popup.js" type="module"></script>    
 </html>
