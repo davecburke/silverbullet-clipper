@@ -6,9 +6,47 @@
         <title>Silverbullet Clipper</title>
         <link rel="stylesheet" href="../css/pure-min.css"/>
         <style>
+            @media (prefers-color-scheme: dark) {
+                .banner {
+                    background-color: #434C5E;
+                    color: white;
+                }
+                body {
+                    background-color: #3B4252;
+                }
+
+                article {
+                    background-color: #434C5E;
+                    color: white;
+                    border: 1px solid #4C566A;
+                }
+
+                .pure-form-message {
+                    color: white;
+                }
+            }
+
+            @media (prefers-color-scheme: light) {
+                .banner {
+                    background-color: #e1e1e1;
+                    color: black;
+                }
+                body {
+                    background-color: white;
+                }
+
+                article {
+                    background-color: white;
+                    color: black;
+                    border: 1px solid #e1e1e1;
+                }
+
+                .pure-form-message {
+                    color: black;
+                }
+            }
+            
             .banner {
-                background-color: #e1e1e1;
-                color: black;
                 display: flex;
                 align-items: center;
                 padding: 10px 20px;
@@ -17,7 +55,7 @@
                 margin-right: 10px;
             }
             article {
-                border: 1px solid #e1e1e1;
+                /*border: 1px solid #e1e1e1;*/
                 margin: 10px;
                 padding: 5px;
             }
