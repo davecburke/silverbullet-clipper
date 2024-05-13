@@ -66,6 +66,9 @@ Silverbullet Clipper uses the following libraries:
 # Version History
 ## 0.1.0
 - Beta development
+## 0.2.0
+- Added support for light and dark theme preferences
+
 <!--Remove hidden content before exporting (thanks @nhaouari !). This allows you to use a different extension (e.g. Adblock) to hide elements that would otherwise clutter up your export
 - Fixes for Obsidian integration in Safari (thanks @aancw !)
 - Keep a few more HTML tags that have no markdown equivalent (`u`, `ins`, `del`, `small`, `big`) (thanks @mnaoumov !)
