@@ -1,10 +1,10 @@
-# Silverbullet Clipper - A web clipper for Silverbullet
+# SilverBullet Clipper - A web clipper for SilverBullet
 
 <!-- [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/deathau/markdownload?style=for-the-badge&sort=semver)](https://github.com/deathau/markdownload/releases/latest) -->
 
-[Silverbullet](https://silverbullet.md/) by Zef Hemel is an awesome note-taking application optimized for people with a hacker mindset
+[SilverBullet](https://silverbullet.md/) by Zef Hemel is an awesome note-taking application optimized for people with a hacker mindset
 
-Silverbullet Clipper is a browser extension that allows you to save either a URL or selected content from a page as markdown to Silverbullet. The capture is added as a Quick Note in the default Silverbullet inbox. Please keep in mind that it is not guaranteed to work on all websites.
+SilverBullet Clipper is a browser extension that allows you to save either a URL or selected content from a page as markdown to SilverBullet. The capture is added as a Quick Note in the default SilverBullet inbox. Please keep in mind that it is not guaranteed to work on all websites.
 
 To use this add-on, simply click the extension icon while you are browsing the page you want to capture. A popup will allow you to change the page title from the default timestamp and add any tags that you want to the page.
 
@@ -51,7 +51,7 @@ You need to do some configurations in order to use this integration.
 -->
 
 # External Libraries
-Silverbullet Clipper uses the following libraries:
+SilverBullet Clipper uses the following libraries:
 <!-- - [Readability.js](https://github.com/mozilla/readability) by Mozilla in version from commit [1fde3ac626bc4c2e5e54daa57c57d48b7ed9c574](https://github.com/mozilla/readability/commit/1fde3ac626bc4c2e5e54daa57c57d48b7ed9c574). This library is also used for the Firefox Reader View and it simplifies the page so that only the important parts are clipped. (Licensed under Apache License Version 2.0) -->
 - [PureCSS](https://github.com/mixmark-io/turndown) by Pure CSS. Version 3.0.0 is used to provide styling to the extension. (Licensed under Yahoo! Inc. BSD-3-Clause license)
 - [Turndown](https://github.com/mixmark-io/turndown) by Dom Christie. Version 7.1.3 is used to convert the HTML into markdown. (Licensed under MIT License)
