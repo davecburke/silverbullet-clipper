@@ -1,8 +1,8 @@
 {
-    "name": "Silverbullet Clipper",
+    "name": "SilverBullet Clipper",
     "version": "0.1.0",
     "manifest_version": 3,
-    "description": "Creates a new page in the Inbox and either adds the web page link or the selected content",
+    "description": "SilverBullet Clipper captures a web page URL or selected content, converts it to markdown and saves it in the SilverBullet Inbox",
     "background": {
         "service_worker": "js/service-worker.js"
     },
