@@ -4,12 +4,16 @@ async function handleMessages(message) {
     if (message.target !== 'popup') {
         return false;
     }
+    const linkSpan = document.getElementById("link");
     switch (message.type) {
         case 'link':
             //Display the link to the new Quick Note
-            const linkSpan = document.getElementById("link");
             linkSpan.innerHTML = '<a href="' + message.url + '" target="_blank">Go to Quick Note</a>';
             break;
+        case 'api-error':
+            //Display the error
+            linkSpan.innerHTML = 'Unable to send capture to SilverBullet. Please check your configuration.';
+            break;    
         default:
         console.warn(`Unexpected message type received: '${message.type}'.`);
         return false;

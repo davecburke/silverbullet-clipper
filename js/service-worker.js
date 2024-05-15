@@ -126,7 +126,11 @@ function sendCaptureToEndpoint(markdown, title) {
             console.log('Response:', data);
         })
         .catch(error => {
-            console.log('Error sending data to API:', error);
+           //Show the api error on the popup
+            chrome.runtime.sendMessage({
+                type: 'api-error',
+                target: 'popup'
+            });
         });
     });
 }
