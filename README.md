@@ -1,6 +1,6 @@
 # SilverBullet Clipper - A web clipper for SilverBullet
 
-<!-- [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/deathau/markdownload?style=for-the-badge&sort=semver)](https://github.com/deathau/markdownload/releases/latest) -->
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/davecburke/silverbullet-clipper?style=for-the-badge&sort=semver)](https://github.com/davecburke/silverbullet-clipper/releases/latest)
 
 [SilverBullet](https://silverbullet.md/) by Zef Hemel is an awesome note-taking application optimized for people with a hacker mindset
 
@@ -9,9 +9,9 @@ SilverBullet Clipper is a browser extension that allows you to save either a URL
 To use this add-on, simply click the extension icon while you are browsing the page you want to capture. A popup will allow you to change the page title from the default timestamp and add any tags that you want to the page.
 
 # Installation
-The extension is available for Google Chrome and Opera.
+The extension is available for Google Chrome and Opera via the [Chrome Web Store](https://chromewebstore.google.com/detail/silverbullet-clipper/nkapoagmecfkneiaejccgkhffdmfmhki).
 
-As the extension is under development, it can only be added to a browser with extensions in developer mode
+[![](https://img.shields.io/chrome-web-store/v/nkapoagmecfkneiaejccgkhffdmfmhki?style=for-the-badge&logo=googlechrome&logoColor=white&label=google%20chrome%20store&labelColor=grey)](https://chromewebstore.google.com/detail/silverbullet-clipper/nkapoagmecfkneiaejccgkhffdmfmhki)
 
 ## Instructions
 1. Clone this repo.
