@@ -1,5 +1,6 @@
+import TurndownService from './turndown.js';
 /* Listener for offscreen */
-chrome.runtime.onMessage.addListener(handleMessages);
+browser.runtime.onMessage.addListener(handleMessages);
 async function handleMessages(message) {
     if (message.target !== 'offscreen') {
         return false;
@@ -46,7 +47,7 @@ function convertToMarkdown(htmlString, url, title, tags) {
 
 /* Sends markdown and title to the service worker */
 function sendToServiceWorker(type, data, title) {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         type,
         target: 'service-worker',
         data,

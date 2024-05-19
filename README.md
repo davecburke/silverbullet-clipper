@@ -13,12 +13,42 @@ The extension is available for Google Chrome and Opera via the [Chrome Web Store
 
 [![](https://img.shields.io/chrome-web-store/v/nkapoagmecfkneiaejccgkhffdmfmhki?style=for-the-badge&logo=googlechrome&logoColor=white&label=google%20chrome%20store&labelColor=grey)](https://chromewebstore.google.com/detail/silverbullet-clipper/nkapoagmecfkneiaejccgkhffdmfmhki)
 
-## Instructions
+## Instructions to Build the Extensions with Grunt
+The extension are already built and can be found in the dist/chrome and dist/firefox folders. If you want to rebuild them the follow these instuctions:
+
+* Prerequisite: [Node.js](https://nodejs.org/)
+1. Install [Grunt](https://gruntjs.com/) via NPM
+```bash
+npm install -g grunt-cli
+npm install grunt --save-dev
+```
+2. Install the Grunt dependencies
+```bash
+npm install
+```
+3a. Build the Chrome extension. The files are built to the dist/chrome folder
+```bash
+grunt build:chrome
+```
+3b. Build the Firefox extension. The files are built to the dist/firefox folder
+```bash
+grunt build:firefox
+```
+
+## Instructions to Test Extensions
 1. Clone this repo.
-2. Go to chrome://extensions/ **or** Setup -> Extensions -> Manage Extensions
-3. At the top right, turn on Developer mode.
-4. Click Load unpacked.
-5. Navigate to the cloned repo and select the folder that has the manifest.json
+### Chrome
+The Chrome extension can be found in the dist/chrome folder
+1. In Chrome, enter chrome://extensions/ in the URL bar **or** navigate to Setup -> Extensions -> Manage Extensions
+2. At the top right, turn on Developer mode.
+3. Click Load unpacked.
+4. Navigate to the cloned repo and select the folder that has the manifest.json
+
+### Firefox
+The Firefox extension can be found in the dist/firefox folder
+1. In firefox, enter about:debugging in the URL bar
+2. Select This Firefox
+3. Select Load Temporary Add-on...
 
 # External Libraries
 SilverBullet Clipper uses the following libraries:
@@ -39,3 +69,4 @@ SilverBullet Clipper uses the following libraries:
 ## 0.3.0
 - Added a user friendly error if the send to SilverBullet fails
 - Fixed a missing style on the legend element needed for dark mode
+- Added firefox version

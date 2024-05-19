@@ -1,12 +1,9 @@
 {
     "name": "SilverBullet Clipper",
     "version": "0.3.0",
-    "manifest_version": 3,
+    "manifest_version": <%= manifestVersion %>,
     "description": "SilverBullet Clipper captures a web page URL or selected content, converts it to markdown and saves it in the SilverBullet Inbox",
-    "background": {
-        "service_worker": "js/service-worker.js"
-    },
-    "action": {
+    "<% if (taskName === 'firefox') { %><%= action %><% } %>action": {
         "default_popup": "html/popup.html",
         "default_icon": {
             "16": "images/icon16.png",
@@ -15,8 +12,10 @@
             "128": "images/icon128.png"
         }
     },
-    "permissions": ["activeTab", "scripting","storage","offscreen"],
-    "host_permissions": [
-        "*://*/*"
-    ]
+    "background": {
+        <%= background %>
+    },
+    "permissions": <%= permissions %>,
+    <% if (taskName === 'chrome') { %><%= hostPermissions %><% } %>
+    <% if (taskName === 'firefox') { %><%= browserSpecificSettings %><% } %>
 }

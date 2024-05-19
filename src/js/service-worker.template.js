@@ -1,7 +1,6 @@
-const OFFSCREEN_DOCUMENT_PATH = '/html/offscreen.html';
-
+<% if (taskName === 'chrome') { %>const OFFSCREEN_DOCUMENT_PATH = '/html/offscreen.html';<% } %>
 /* Get the selected text from the tab */
-async function getTextFromSelection(tabId) {
+<% if (taskName === 'chrome') { %>async function getTextFromSelection(tabId) {
     return new Promise((resolve, reject) => {
         chrome.scripting.executeScript({
             target: { tabId: tabId },
@@ -39,10 +38,42 @@ async function sendMessageToOffscreenDocument(type, data, url, title, tags) {
         title,
         tags
     });
+}<% } %><% if (taskName === 'firefox') { %>async function getTextFromSelection(tabId) {
+    return new Promise((resolve, reject) => {
+        browser.tabs.executeScript(tabId, {
+            code: `
+                var range = window.getSelection().getRangeAt(0);
+                var div = document.createElement('div');
+                div.appendChild(range.cloneContents());
+                var html = div.innerHTML;
+                html;
+            `
+        })
+        .then(result => {
+            resolve(result[0]);
+        })
+        .catch(error => {
+            reject(error);
+        });
+    });
 }
 
+/* Use an offscreen document to parse the captured DOM */
+function sendMessageToOffscreenDocument(type, data, url, title, tags) {
+    browser.runtime.sendMessage({
+        type,
+        target: 'offscreen',
+        data,
+        url,
+        title,
+        tags
+    });
+}
+<% } %>
+
+
 /* Listener for service worker */
-chrome.runtime.onMessage.addListener(handleMessages);
+<%= runTime %>.runtime.onMessage.addListener(handleMessages);
 async function handleMessages(message) {
     if (message.target !== 'service-worker') {
         return;
@@ -51,7 +82,7 @@ async function handleMessages(message) {
         case 'convert-to-markdown-result':
             //Send the markdown via the API
             sendCaptureToEndpoint(message.data, message.title);
-            closeOffscreenDocument();
+            <% if (taskName === 'chrome') { %>closeOffscreenDocument();<% } %>
             break;
         case 'capture':
             //Capture the user selection
@@ -65,7 +96,7 @@ async function handleMessages(message) {
 /* Capture the the tab URL and any selected HTML */
 async function captureTab(title, tags) {
     let queryOptions = { active: true, lastFocusedWindow: true };
-    let [tab] = await chrome.tabs.query(queryOptions);
+    let [tab] = await <%= runTime %>.tabs.query(queryOptions);
     const url = tab.url;
     //Get the selected HTML form the tab and then send to the offscreen document for parsing
     const text = await getTextFromSelection(tab.id);
@@ -78,6 +109,7 @@ async function captureTab(title, tags) {
         );
 }
 
+<% if (taskName === 'chrome') { %>
 /* Close the offscreen document */
 async function closeOffscreenDocument() {
     if (!(await hasDocument())) {
@@ -96,10 +128,10 @@ async function hasDocument() {
     }
     return false;
 }
-
+<% } %>
 /* Send the markdown to the Silverbullet endpoint */
 function sendCaptureToEndpoint(markdown, title) {
-    chrome.storage.sync.get(["hostURL", "token"], (items) => {
+    <%= runTime %>.storage.sync.get(["hostURL", "token"], (items) => {
         const endpoint = items.hostURL + '/Inbox/' + encodeURIComponent(title)  + '.md';
         const requestOptions = {
             method: 'PUT',
@@ -115,7 +147,7 @@ function sendCaptureToEndpoint(markdown, title) {
                 throw new Error('Network response was not ok');
             } else {
                 //Update the link span on the popup to show a link to the new Quick Note
-                chrome.runtime.sendMessage({
+                <%= runTime %>.runtime.sendMessage({
                     type: 'link',
                     target: 'popup',
                     url: endpoint
@@ -127,7 +159,7 @@ function sendCaptureToEndpoint(markdown, title) {
         })
         .catch(error => {
            //Show the api error on the popup
-            chrome.runtime.sendMessage({
+            <%= runTime %>.runtime.sendMessage({
                 type: 'api-error',
                 target: 'popup'
             });

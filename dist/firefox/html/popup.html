@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>SilverBullet Clipper</title>
+        <link rel="stylesheet" href="../css/pure-min.css"/>
+        <style>
+            @media (prefers-color-scheme: dark) {
+                .banner {
+                    background-color: #434C5E;
+                    color: white;
+                }
+                body {
+                    background-color: #3B4252;
+                }
+
+                article {
+                    background-color: #434C5E;
+                    color: white;
+                    border: 1px solid #4C566A;
+                }
+
+                .pure-form-message {
+                    color: white;
+                }
+
+                a {
+                    color: white;
+                }
+
+                .pure-form legend {
+                    color: white;
+                }
+            }
+
+            @media (prefers-color-scheme: light) {
+                .banner {
+                    background-color: #e1e1e1;
+                    color: black;
+                }
+                body {
+                    background-color: white;
+                }
+
+                article {
+                    background-color: white;
+                    color: black;
+                    border: 1px solid #e1e1e1;
+                }
+
+                .pure-form-message {
+                    color: black;
+                }
+            }
+            
+            .banner {
+                display: flex;
+                align-items: center;
+                padding: 10px 20px;
+            }
+            .logo img {
+                margin-right: 10px;
+            }
+            article {
+                /*border: 1px solid #e1e1e1;*/
+                margin: 10px;
+                padding: 5px;
+            }
+            .float-right {
+                float: right;
+            }
+            .button-secondary {
+                color: white;
+                border-radius: 4px;
+                text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+                background: rgb(66, 184, 221);
+            }
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="banner">
+            <div class="logo">
+                <img src="../images/icon32.png" alt="Logo">
+            </div>
+            <div class="title">
+                <h3>SilverBullet Clipper</h3>
+            </div>
+        </div>
+        <article id="articleCapture">
+            <header><b>Capture</b></header>
+            <p>
+                <form class="pure-form pure-form-stacked">
+                    <fieldset>
+                        <label for="title">Title</label>
+                        <input type="text" id="title">
+                        <label for="tags">Tags</label>
+                        <input type="text" id="tags">
+                        <span class="pure-form-message">Separate tags by space</span>
+                    </fieldset>
+                </form>
+            </p>
+            <p><span id="link"></span></p>
+            <footer>
+                <button id="capture" type="submit" class="pure-button pure-button-primary">Capture</button>
+                <button id="configure" type="submit" class="pure-button button-secondary float-right">Configure</button>
+            </footer>
+        </article>
+        <article id="articleConfigure" class="hidden">
+            <header><b>Configure</b></header>
+            <p>
+                <form class="pure-form pure-form-stacked">
+                    <fieldset>
+                        <legend>Credentials</legend>
+                        <label for="hostURL">Host URL</label>
+                        <input type="text" id="hostURL">
+                        <span class="pure-form-message">eg. http(s)://silverbullet.mydomain.com:3000</span>
+                        <label for="token">Token</label>
+                        <input type="password" id="token">
+                        <span class="pure-form-message">The token is set in the environment variable SB_AUTH_TOKEN</span>
+                    </fieldset>
+                </form>
+            </p>
+            <footer>
+                <button id="save" type="submit" class="pure-button pure-button-primary">Save</button>
+                <button id="close" type="submit" class="pure-button button-secondary float-right">Close</button>
+            </footer>
+        </article>
+    </body>
+    <script src="../js/offscreen.js" type="module"></script>
+    <script src="../js/popup.js" type="module"></script>
+        
+</html>

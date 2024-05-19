@@ -55,11 +55,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     displayTitle();
     //Prompt to provide credentials if they are missing
-    chrome.storage.sync.get(["hostURL", "token"], (items) => {
-        if(items === null || items.hostURL === null || items.hostURL === '' ||items.token === null || items.token === '') {
+    chrome.storage.sync.get(["hostURL", "token"]).then(items => {
+        if(items === null || items.hostURL === null || items.hostURL === '' || items.token === null || items.token === '') {
             hideCapture();
             showConfigure();
         }
+    }).catch(error => {
+        console.error('Error retrieving storage:', error);
     });
 });
 
