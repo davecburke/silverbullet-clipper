@@ -85,7 +85,7 @@ function showConfigure() {
     <%= runTime %>.storage.sync.get(["hostURL", "token", "directory"], (items) => {
         document.getElementById('hostURL').value = items?.hostURL || '';
         document.getElementById('token').value = items?.token || '';
-        document.getElementById('directory').value = items.directory || '';
+        document.getElementById('directory').value = items.directory || 'Inbox';
     });
 }
 
