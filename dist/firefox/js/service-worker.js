@@ -75,7 +75,8 @@ async function captureTab(title, tags) {
 /* Send the markdown to the Silverbullet endpoint */
 function sendCaptureToEndpoint(markdown, title) {
     browser.storage.sync.get(["hostURL", "token"], (items) => {
-        const endpoint = items.hostURL + '/Inbox/' + encodeURIComponent(title)  + '.md';
+        const link = items.hostURL + '/Inbox/' + encodeURI(title);
+        const endpoint = link + '.md';
         const requestOptions = {
             method: 'PUT',
             headers: {
@@ -93,7 +94,7 @@ function sendCaptureToEndpoint(markdown, title) {
                 browser.runtime.sendMessage({
                     type: 'link',
                     target: 'popup',
-                    url: endpoint
+                    url: link
                 });
             }
         })

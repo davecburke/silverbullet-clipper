@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+    const version = '0.3.1';
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -10,6 +11,7 @@ module.exports = function(grunt) {
                 options: {
                     data: {
                         taskName: 'chrome',
+                        version: version,
                         manifestVersion: 3,
                         background: '"service_worker": "js/service-worker.js"',
                         permissions: '["activeTab", "scripting","storage","offscreen"]',
@@ -62,11 +64,12 @@ module.exports = function(grunt) {
                 options: {
                     data: {
                         taskName: 'firefox',
+                        version: version,
                         manifestVersion: 2,
                         action: 'browser_',
                         background: '"scripts": ["js/service-worker.js"]',
                         permissions: '["<all_urls>","activeTab","storage"]',
-                        browserSpecificSettings: '"browser_specific_settings": {"gecko": {"id": "silverbullet-clipper@burke.ext","strict_min_version": "42.0"}}'
+                        browserSpecificSettings: '"browser_specific_settings": {"gecko": {"id": "silverbullet-clipper@burke.ext","strict_min_version": "100.0"}}'
                     }
                 },
                 files: {
@@ -128,11 +131,42 @@ module.exports = function(grunt) {
                 ] 
             }
         },
+        compress: {
+            chrome: {
+                options: {
+                    archive: 'dist/chrome.zip',  // The name of the output zip file
+                    mode: 'zip'
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'dist/chrome',  // The directory to zip
+                        src: ['**/*'],  // Include all files and subdirectories
+                        dest: ''  // Preserve directory structure in the zip
+                    }
+                ]
+            },
+            firefox: {
+                options: {
+                    archive: 'dist/firefox.zip',  // The name of the output zip file
+                    mode: 'zip'
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'dist/firefox',  // The directory to zip
+                        src: ['**/*'],  // Include all files and subdirectories
+                        dest: ''  // Preserve directory structure in the zip
+                    }
+                ]
+            }
+        }
     });
     // Load the plugin.
     grunt.loadNpmTasks('grunt-template');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-compress');
     // Register tasks.
-    grunt.registerTask('build:chrome', ['template:chrome_manifest_json','template:chrome_popup_html','template:chrome_popup_offscreen_js','template:chrome_service_worker_js','copy:shared_files','copy:chrome_files']);
-    grunt.registerTask('build:firefox', ['template:firefox_manifest_json','template:firefox_popup_html','template:firefox_popup_offscreen_js','template:firefox_service_worker_js','copy:shared_files']);
+    grunt.registerTask('build:chrome', ['template:chrome_manifest_json','template:chrome_popup_html','template:chrome_popup_offscreen_js','template:chrome_service_worker_js','copy:shared_files','copy:chrome_files','compress:chrome']);
+    grunt.registerTask('build:firefox', ['template:firefox_manifest_json','template:firefox_popup_html','template:firefox_popup_offscreen_js','template:firefox_service_worker_js','copy:shared_files','compress:firefox']);
 };

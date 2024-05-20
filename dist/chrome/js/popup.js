@@ -8,11 +8,15 @@ async function handleMessages(message) {
     switch (message.type) {
         case 'link':
             //Display the link to the new Quick Note
-            linkSpan.innerHTML = '<a href="' + message.url + '" target="_blank">Go to Quick Note</a>';
+            var link = document.createElement('a');
+            link.href = message.url;
+            link.textContent = 'Go to Quick Note';
+            link.target = '_blank'; // This opens the link in a new tab
+            linkSpan.appendChild(link);
             break;
         case 'api-error':
             //Display the error
-            linkSpan.innerHTML = 'Unable to send capture to SilverBullet. Please check your configuration.';
+            linkSpan.textContent = 'Unable to send capture to SilverBullet. Please check your configuration.';
             break;    
         default:
         console.warn(`Unexpected message type received: '${message.type}'.`);
@@ -35,6 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //Capture button event
     const captureButton = document.getElementById("capture");
     captureButton.addEventListener("click", () => {
+        const linkSpan = document.getElementById("link");
+        linkSpan.textContent = '';
         const title = document.getElementById("title").value;
         const tags = document.getElementById("tags").value;
         let data = {'title': title, 'tags': tags};

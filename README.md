@@ -70,3 +70,8 @@ SilverBullet Clipper uses the following libraries:
 - Added a user friendly error if the send to SilverBullet fails
 - Fixed a missing style on the legend element needed for dark mode
 - Added firefox version
+## 0.3.1
+- Changed link to new SilverBullet page from encodeURIComponent() to encodeURI() to make the link consistent with how SilverBullet formats links.
+- Removed '.md' from the link to the new SilverBullet page as it's redundant
+- Fixed missing image when looking at the extension in My Extensions
+- Sanatized HTML for enhanced security

@@ -132,7 +132,8 @@ async function hasDocument() {
 /* Send the markdown to the Silverbullet endpoint */
 function sendCaptureToEndpoint(markdown, title) {
     <%= runTime %>.storage.sync.get(["hostURL", "token"], (items) => {
-        const endpoint = items.hostURL + '/Inbox/' + encodeURIComponent(title)  + '.md';
+        const link = items.hostURL + '/Inbox/' + encodeURI(title);
+        const endpoint = link + '.md';
         const requestOptions = {
             method: 'PUT',
             headers: {
@@ -150,7 +151,7 @@ function sendCaptureToEndpoint(markdown, title) {
                 <%= runTime %>.runtime.sendMessage({
                     type: 'link',
                     target: 'popup',
-                    url: endpoint
+                    url: link
                 });
             }
         })
