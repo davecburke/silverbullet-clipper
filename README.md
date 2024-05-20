@@ -1,6 +1,6 @@
 # SilverBullet Clipper - A web clipper for SilverBullet
 
-[![GitHub Release](https://img.shields.io/github/v/release/davecburke/silverbullet-clipper?style=for-the-badge&color=orange)](https://github.com/davecburke/silverbullet-clipper/releases/latest)
+[![GitHub Release](https://img.shields.io/github/v/release/davecburke/silverbullet-clipper?style=for-the-badge)](https://github.com/davecburke/silverbullet-clipper/releases/latest)
 
 [SilverBullet](https://silverbullet.md/) by Zef Hemel is an awesome note-taking application optimized for people with a hacker mindset
 
