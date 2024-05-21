@@ -1,5 +1,7 @@
 # SilverBullet Clipper - A web clipper for SilverBullet
 
+https://shields.io/
+
 [![GitHub Release](https://img.shields.io/github/v/release/davecburke/silverbullet-clipper?style=for-the-badge)](https://github.com/davecburke/silverbullet-clipper/releases/latest)
 
 [SilverBullet](https://silverbullet.md/) by Zef Hemel is an awesome note-taking application optimized for people with a hacker mindset
@@ -9,9 +11,11 @@ SilverBullet Clipper is a browser extension that allows you to save either a URL
 To use this add-on, simply click the extension icon while you are browsing the page you want to capture. A popup will allow you to change the page title from the default timestamp and add any tags that you want to the page.
 
 # Installation
-The extension is available for Google Chrome and Opera via the [Chrome Web Store](https://chromewebstore.google.com/detail/silverbullet-clipper/nkapoagmecfkneiaejccgkhffdmfmhki).
+The extension is available for Google Chrome and Opera via the [Chrome Web Store](https://chromewebstore.google.com/detail/silverbullet-clipper/nkapoagmecfkneiaejccgkhffdmfmhki). The Firefox extension can be added from [Firefox Browser Add-Ons](https://addons.mozilla.org/addon/silverbullet-clipper/) 
 
 [![](https://img.shields.io/chrome-web-store/v/nkapoagmecfkneiaejccgkhffdmfmhki?style=for-the-badge&logo=googlechrome&logoColor=white&label=google%20chrome%20store&labelColor=grey)](https://chromewebstore.google.com/detail/silverbullet-clipper/nkapoagmecfkneiaejccgkhffdmfmhki)
+
+[![Mozilla Add-on Version](https://img.shields.io/amo/v/silverbullet-clipper?style=for-the-badge&logo=firefox&logoColor=white)](https://addons.mozilla.org/addon/silverbullet-clipper/)
 
 ## Instructions to Build the Extensions with Grunt
 The extension are already built and can be found in the dist/chrome and dist/firefox folders. If you want to rebuild them the follow these instuctions:
@@ -54,6 +58,7 @@ The Firefox extension can be found in the dist/firefox folder
 SilverBullet Clipper uses the following libraries:
 - [PureCSS](https://github.com/mixmark-io/turndown) by Pure CSS. Version 3.0.0 is used to provide styling to the extension. (Licensed under Yahoo! Inc. BSD-3-Clause license)
 - [Turndown](https://github.com/mixmark-io/turndown) by Dom Christie. Version 7.1.3 is used to convert the HTML into markdown. (Licensed under MIT License)
+- [Shields.io](https://shields.io/) by Badges. Provides the version badges for git, chrome and firefox on this page
 
 # Permissions
 - Access tabs: used to access the website content when the icon in the browser bar is clicked.
