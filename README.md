@@ -9,7 +9,7 @@ SilverBullet Clipper is a browser extension that allows you to save either a URL
 To use this add-on, simply click the extension icon while you are browsing the page you want to capture. A popup will allow you to change the page title from the default timestamp and add any tags that you want to the page.
 
 # Installation
-The extension is available for Google Chrome and Opera via the [Chrome Web Store](https://chromewebstore.google.com/detail/silverbullet-clipper/nkapoagmecfkneiaejccgkhffdmfmhki). The Firefox extension can be added from [Firefox Browser Add-Ons](https://addons.mozilla.org/addon/silverbullet-clipper/) 
+The extension is available for **Google Chrome** and **Opera** via the [Chrome Web Store](https://chromewebstore.google.com/detail/silverbullet-clipper/nkapoagmecfkneiaejccgkhffdmfmhki). The Firefox extension is available for both the **Firefox Desktop** and **Firefox for Android**. It can be added from [Firefox Browser Add-Ons](https://addons.mozilla.org/addon/silverbullet-clipper/) 
 
 [![](https://img.shields.io/chrome-web-store/v/nkapoagmecfkneiaejccgkhffdmfmhki?style=for-the-badge&logo=googlechrome&logoColor=white&label=google%20chrome%20store&labelColor=grey)](https://chromewebstore.google.com/detail/silverbullet-clipper/nkapoagmecfkneiaejccgkhffdmfmhki)
 
