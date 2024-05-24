@@ -64,8 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //Prompt to provide credentials if they are missing
     <%= runTime %>.storage.sync.get(["hostURL", "token", "directory"]).then(items => {
         if(items === null || items.hostURL === null || items.hostURL === '' 
-          || items.token === null || items.token === '' 
-          || items.directory === null || items.directory === '') 
+            || items.token === null || items.token === '' 
+            || items.directory === null || items.directory === '') 
         {
             hideCapture();
             showConfigure();

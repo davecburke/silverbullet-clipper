@@ -31,7 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
     saveButton.addEventListener("click", () => {
         const hostURL = document.getElementById("hostURL").value;
         const token = document.getElementById("token").value;
-        chrome.storage.sync.set({ "hostURL": hostURL, "token": token }, () => {
+        const directory = document.getElementById('directory').value;
+        chrome.storage.sync.set({ "hostURL": hostURL, "token": token, "directory": directory }, () => {
             hideConfigure();
             showCapture();
         });
@@ -61,8 +62,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     displayTitle();
     //Prompt to provide credentials if they are missing
-    chrome.storage.sync.get(["hostURL", "token"]).then(items => {
-        if(items === null || items.hostURL === null || items.hostURL === '' || items.token === null || items.token === '') {
+    chrome.storage.sync.get(["hostURL", "token", "directory"]).then(items => {
+        if(items === null || items.hostURL === null || items.hostURL === '' 
+            || items.token === null || items.token === '' 
+            || items.directory === null || items.directory === '') 
+        {
             hideCapture();
             showConfigure();
         }
@@ -78,9 +82,10 @@ function showConfigure() {
         configure.classList.remove("hidden");
     }
     //Get the hostURL and token from storage
-    chrome.storage.sync.get(["hostURL", "token"], (items) => {
+    chrome.storage.sync.get(["hostURL", "token", "directory"], (items) => {
         document.getElementById('hostURL').value = items?.hostURL || '';
         document.getElementById('token').value = items?.token || '';
+        document.getElementById('directory').value = items.directory || 'Inbox';
     });
 }
 

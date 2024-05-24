@@ -2,9 +2,9 @@
 
 [![GitHub Release](https://img.shields.io/github/v/release/davecburke/silverbullet-clipper?style=for-the-badge)](https://github.com/davecburke/silverbullet-clipper/releases/latest)
 
-[SilverBullet](https://silverbullet.md/) by Zef Hemel is an awesome note-taking application optimized for people with a hacker mindset
+[SilverBullet](https://silverbullet.md/) by Zef Hemel is an awesome note-taking application optimized for people with a hacker mindset.
 
-SilverBullet Clipper is a browser extension that allows you to save either a URL or selected content from a page as markdown to SilverBullet. The capture is added as a Quick Note in the default SilverBullet inbox. Please keep in mind that it is not guaranteed to work on all websites.
+SilverBullet Clipper is a browser extension that allows you to save either a URL or selected content from a page as markdown to SilverBullet. By default, the capture is added as a Quick Note in the default SilverBullet inbox. Please keep in mind that it is not guaranteed to work on all websites.
 
 To use this add-on, simply click the extension icon while you are browsing the page you want to capture. A popup will allow you to change the page title from the default timestamp and add any tags that you want to the page.
 
@@ -15,8 +15,41 @@ The extension is available for Google Chrome and Opera via the [Chrome Web Store
 
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/silverbullet-clipper?style=for-the-badge&logo=firefox&logoColor=white)](https://addons.mozilla.org/addon/silverbullet-clipper/)
 
+# Usage
+## The Capture Page
+![Capture Page](images/silverbullet_main.png)
+
+1. The title of the page as it will appear in SilverBullet. This mimics the title of a page created by the SilverBullet "Quick Note" button.
+2. Multiple tags, separated by spaces, can be added to the page. The tags can be entered with or without a leading hash. For example, this is a valid entry: tag1 #tag2 tag3   
+
+## The Configure Page
+![Capture Page](images/silverbullet_configure.png)
+
+1. The host URL points to the instance of your SilverBullet installation. If you're running SilverBullet locally the URL will be something like http://192.168.86.54:3000. If you are running SilverBullet externally, or accessing it via a proxy, the host URL will be something like https://silverbullet.mydomain.com
+2. The token will be whatever token you specified in the SB_AUTH_TOKEN environment variable.
+
+    ### Command Line Example
+    ```bash
+    SB_USER=admin:mypassword SB_AUTH_TOKEN=mysuperlongtoken SB_HOSTNAME=0.0.0.0 /root/.deno/bin/silverbullet /root/Silverbullet/space
+    ```
+    ### Docker Compose Example
+    ```bash
+    services:
+        silverbullet:
+            image: zefhemel/silverbullet
+            restart: unless-stopped
+            environment:
+            - SB_AUTH_TOKEN=mysuperlongtoken
+            - SB_USER=admin:mypassword
+            volumes:
+            - ./space:/space
+            ports:
+            - 3000:3000
+    ```
+3. The directory is where your page will be created in SilverBullet. The default directory is Inbox as this is the directory that the SilverBullet Quick Note uses.
+# Build & Testing
 ## Instructions to Build the Extensions with Grunt
-The extension are already built and can be found in the dist/chrome and dist/firefox folders. If you want to rebuild them the follow these instuctions:
+The extension is already built and can be found in the dist/chrome and dist/firefox folders. If you want to rebuild them the follow these instuctions:
 
 * Prerequisite: [Node.js](https://nodejs.org/)
 1. Install [Grunt](https://gruntjs.com/) via NPM
@@ -52,6 +85,9 @@ The Firefox extension can be found in the dist/firefox folder
 2. Select This Firefox
 3. Select Load Temporary Add-on...
 
+### Firefox for Android
+The Firefox extension can be found in the dist/firefox folder. Detailed instructions for testing the extension on Firefox for Android can be found [here](https://extensionworkshop.com/documentation/develop/developing-extensions-for-firefox-for-android/) 
+
 # External Libraries
 SilverBullet Clipper uses the following libraries:
 - [PureCSS](https://github.com/mixmark-io/turndown) by Pure CSS. Version 3.0.0 is used to provide styling to the extension. (Licensed under Yahoo! Inc. BSD-3-Clause license)
@@ -78,3 +114,5 @@ SilverBullet Clipper uses the following libraries:
 - Removed '.md' from the link to the new SilverBullet page as it's redundant
 - Fixed missing image when looking at the extension in My Extensions
 - Sanatized HTML for enhanced security
+## 1.0.0
+- Added ability to specify the SilverBullet directory the capture will be saved to. Thanks [dklawran](https://github.com/dklawren)

@@ -100,8 +100,9 @@ async function hasDocument() {
 
 /* Send the markdown to the Silverbullet endpoint */
 function sendCaptureToEndpoint(markdown, title) {
-    chrome.storage.sync.get(["hostURL", "token"], (items) => {
-        const link = items.hostURL + '/Inbox/' + encodeURI(title);
+    chrome.storage.sync.get(["hostURL", "token", "directory"], (items) => {
+        items.directory = (items.directory == null)?'Inbox':items.directory;
+        const link = items.hostURL + '/' + items.directory + '/' + encodeURI(title);
         const endpoint = link + '.md';
         const requestOptions = {
             method: 'PUT',
