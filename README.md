@@ -90,7 +90,7 @@ The Firefox extension can be found in the dist/firefox folder. Detailed instruct
 
 # External Libraries
 SilverBullet Clipper uses the following libraries:
-- [PureCSS](https://github.com/mixmark-io/turndown) by Pure CSS. Version 3.0.0 is used to provide styling to the extension. (Licensed under Yahoo! Inc. BSD-3-Clause license)
+- [PureCSS](https://purecss.io/) by Pure CSS. Version 3.0.0 is used to provide styling to the extension. (Licensed under Yahoo! Inc. BSD-3-Clause license)
 - [Turndown](https://github.com/mixmark-io/turndown) by Dom Christie. Version 7.1.3 is used to convert the HTML into markdown. (Licensed under MIT License)
 - [Shields.io](https://shields.io/) by Badges. Provides the version badges for git, chrome and firefox on this page
 
