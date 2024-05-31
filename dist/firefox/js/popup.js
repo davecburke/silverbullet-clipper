@@ -33,7 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const token = document.getElementById("token").value;
         const directory = document.getElementById('directory').value;
         const appendPageTitleDefault = document.getElementById('append-page-title-default').checked;
-        browser.storage.sync.set({ "hostURL": hostURL, "token": token, "directory": directory, "appendPageTitleDefault": appendPageTitleDefault }, () => {
+        const maxTitleLength = document.getElementById("max-title-length").value;
+        browser.storage.sync.set({ "hostURL": hostURL, "token": token, "directory": directory, "appendPageTitleDefault": appendPageTitleDefault, "maxTitleLength": maxTitleLength }, () => {
             hideConfigure();
             showCapture();
             document.getElementById('append-page-title').checked = appendPageTitleDefault;
@@ -87,11 +88,12 @@ function showConfigure() {
         configure.classList.remove("hidden");
     }
     //Get the hostURL and token from storage
-    browser.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault"], (items) => {
+    browser.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault", "maxTitleLength"], (items) => {
         document.getElementById('hostURL').value = items?.hostURL || '';
         document.getElementById('token').value = items?.token || '';
         document.getElementById('directory').value = items.directory || 'Inbox';
         document.getElementById('append-page-title-default').checked = items.appendPageTitleDefault;
+        document.getElementById('max-title-length').value = items.maxTitleLength || '70';
     });
 }
 

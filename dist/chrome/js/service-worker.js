@@ -93,7 +93,12 @@ async function captureTab(title, tags, appendPageTitle) {
     }
     const invalidCharactersRegex = /[^a-zA-Z0-9\-_\s\(\):]/g;
     title = title.replace(invalidCharactersRegex,'_');
-    title = (title.length > 70)?title.substring(0,66) + '...)':title;
+    chrome.storage.sync.get(["maxTitleLength"], (items) => {
+        let maxTitleLength = Number(items.maxTitleLength || '70');
+        if (Number.isInteger(maxTitleLength) && maxTitleLength > 0) {
+            title = (title.length > maxTitleLength)?title.substring(0,maxTitleLength - 5) + '...)':title;    
+        }
+    });
     //Get the selected HTML form the tab and then send to the offscreen document for parsing
     const text = await getTextFromSelection(tab.id);
         sendMessageToOffscreenDocument(

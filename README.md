@@ -16,13 +16,14 @@ The extension is available for **Google Chrome** and **Opera** via the [Chrome W
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/silverbullet-clipper?style=for-the-badge&logo=firefox&logoColor=white)](https://addons.mozilla.org/addon/silverbullet-clipper/)
 
 # Usage
-## The Capture Page
+## 1. The Capture Page
 ![Capture Page](images/silverbullet_main.png)
 
 1. The title of the page as it will appear in SilverBullet. This mimics the title of a page created by the SilverBullet "Quick Note" button.
-2. Multiple tags, separated by spaces, can be added to the page. The tags can be entered with or without a leading hash. For example, this is a valid entry: tag1 #tag2 tag3   
+2. When the Append Page Title is selected, the web page title will be added to the title entered in (1.1). This is defaulted to off but can be defaulted to on via the configure page (2.4). The page title will be enclosed in brackets. Eg 2024-05-31 16:28:33 (The Age Newspaper). 
+3. Multiple tags, separated by spaces, can be added to the page. The tags can be entered with or without a leading hash. For example, this is a valid entry: tag1 #tag2 tag3   
 
-## The Configure Page
+## 2. The Configure Page
 ![Capture Page](images/silverbullet_configure.png)
 
 1. The host URL points to the instance of your SilverBullet installation. If you're running SilverBullet locally the URL will be something like http://192.168.86.54:3000. If you are running SilverBullet externally, or accessing it via a proxy, the host URL will be something like https://silverbullet.mydomain.com
@@ -47,6 +48,9 @@ The extension is available for **Google Chrome** and **Opera** via the [Chrome W
             - 3000:3000
     ```
 3. The directory is where your page will be created in SilverBullet. The default directory is Inbox as this is the directory that the SilverBullet Quick Note uses.
+4. When the Append Page Title is selected, the Append Page Title check box on the Capture page (1.2) will default to selected.
+5. The Max. Title Length determines how long the note's title will be. This is defaulted to 70 characters. If the note title exceeds this length, '...' will indicate that the title has been concatenated. Eg 2024-05-31 16:28:33 (The Age Newspaper Melbourne Aus...)
+
 # Build & Testing
 ## Instructions to Build the Extensions with Grunt
 The extension is already built and can be found in the dist/chrome and dist/firefox folders. If you want to rebuild them the follow these instuctions:
@@ -101,18 +105,22 @@ SilverBullet Clipper uses the following libraries:
 - Storage: used to save extension options.
 
 # Version History
-## 0.1.0
-- Beta development
-## 0.2.0
-- Added support for light and dark theme preferences
-## 0.3.0
-- Added a user friendly error if the send to SilverBullet fails
-- Fixed a missing style on the legend element needed for dark mode
-- Added firefox version
+## 1.1.0
+- Added the option to append the web page title to the note's title when on the capture page. The default is don't append
+- Added the option to default the append web title checkbox to true. The default is false
+- Added the option to set the length of the note's title (the default is 70 characters). Trailing '...' will show that the title has been concatenated
+## 1.0.0
+- Added ability to specify the SilverBullet directory the capture will be saved to. Thanks [dklawran](https://github.com/dklawren)
 ## 0.3.1
 - Changed link to new SilverBullet page from encodeURIComponent() to encodeURI() to make the link consistent with how SilverBullet formats links.
 - Removed '.md' from the link to the new SilverBullet page as it's redundant
 - Fixed missing image when looking at the extension in My Extensions
 - Sanatized HTML for enhanced security
-## 1.0.0
-- Added ability to specify the SilverBullet directory the capture will be saved to. Thanks [dklawran](https://github.com/dklawren)
+## 0.3.0
+- Added a user friendly error if the send to SilverBullet fails
+- Fixed a missing style on the legend element needed for dark mode
+- Added firefox version
+## 0.2.0
+- Added support for light and dark theme preferences
+## 0.1.0
+- Beta development
