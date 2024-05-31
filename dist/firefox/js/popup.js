@@ -32,9 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const hostURL = document.getElementById("hostURL").value;
         const token = document.getElementById("token").value;
         const directory = document.getElementById('directory').value;
-        browser.storage.sync.set({ "hostURL": hostURL, "token": token, "directory": directory }, () => {
+        const appendPageTitleDefault = document.getElementById('append-page-title-default').checked;
+        browser.storage.sync.set({ "hostURL": hostURL, "token": token, "directory": directory, "appendPageTitleDefault": appendPageTitleDefault }, () => {
             hideConfigure();
             showCapture();
+            document.getElementById('append-page-title').checked = appendPageTitleDefault;
         });
     });
     //Capture button event
@@ -44,7 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
         linkSpan.textContent = '';
         const title = document.getElementById("title").value;
         const tags = document.getElementById("tags").value;
-        let data = {'title': title, 'tags': tags};
+        const appendPageTitle = document.getElementById('append-page-title').checked;
+        let data = {'title': title, 'tags': tags, 'appendPageTitle': appendPageTitle};
         //Tell the service worker to capture the tab
         sendToServiceWorker('capture',data);
     });
@@ -62,13 +65,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     displayTitle();
     //Prompt to provide credentials if they are missing
-    browser.storage.sync.get(["hostURL", "token", "directory"]).then(items => {
+    browser.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault"]).then(items => {
         if(items === null || items.hostURL === null || items.hostURL === '' 
             || items.token === null || items.token === '' 
             || items.directory === null || items.directory === '') 
         {
             hideCapture();
             showConfigure();
+        } else if(items !== null && items.appendPageTitleDefault !== null && items.appendPageTitleDefault) {
+            document.getElementById('append-page-title').checked = items.appendPageTitleDefault;
         }
     }).catch(error => {
         console.error('Error retrieving storage:', error);
@@ -82,10 +87,11 @@ function showConfigure() {
         configure.classList.remove("hidden");
     }
     //Get the hostURL and token from storage
-    browser.storage.sync.get(["hostURL", "token", "directory"], (items) => {
+    browser.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault"], (items) => {
         document.getElementById('hostURL').value = items?.hostURL || '';
         document.getElementById('token').value = items?.token || '';
         document.getElementById('directory').value = items.directory || 'Inbox';
+        document.getElementById('append-page-title-default').checked = items.appendPageTitleDefault;
     });
 }
 

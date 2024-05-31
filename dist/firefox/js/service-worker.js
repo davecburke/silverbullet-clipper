@@ -20,6 +20,21 @@ async function getTextFromSelection(tabId) {
     });
 }
 
+/* Get the title of the web page from the tab */
+async function getTitleFromTab(tabId) {
+    return new Promise((resolve, reject) => {
+        browser.tabs.executeScript(tabId, {
+            code: `document.title;`
+        })
+        .then(result => {
+            resolve(result[0]);
+        })
+        .catch(error => {
+            reject(error);
+        });
+    });
+}
+
 /* Use an offscreen document to parse the captured DOM */
 function sendMessageToOffscreenDocument(type, data, url, title, tags) {
     browser.runtime.sendMessage({
@@ -48,7 +63,7 @@ async function handleMessages(message) {
             break;
         case 'capture':
             //Capture the user selection
-            captureTab(message.data.title, message.data.tags);
+            captureTab(message.data.title, message.data.tags, message.data.appendPageTitle);
             break;            
         default:
         console.warn(`Unexpected message type received: '${message.type}'.`);
@@ -56,10 +71,18 @@ async function handleMessages(message) {
 }
 
 /* Capture the the tab URL and any selected HTML */
-async function captureTab(title, tags) {
+async function captureTab(title, tags, appendPageTitle) {
     let queryOptions = { active: true, lastFocusedWindow: true };
     let [tab] = await browser.tabs.query(queryOptions);
     const url = tab.url;
+    if(appendPageTitle) {
+        //Get the title of the web page from the tab
+        let pageTitle = await getTitleFromTab(tab.id);
+        title += ' (' + pageTitle + ')';
+    }
+    const invalidCharactersRegex = /[^a-zA-Z0-9\-_\s\(\):]/g;
+    title = title.replace(invalidCharactersRegex,'_');
+    title = (title.length > 70)?title.substring(0,66) + '...)':title;
     //Get the selected HTML form the tab and then send to the offscreen document for parsing
     const text = await getTextFromSelection(tab.id);
         sendMessageToOffscreenDocument(

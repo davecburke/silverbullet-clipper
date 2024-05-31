@@ -53,7 +53,7 @@
                     color: black;
                 }
             }
-            
+
             .banner {
                 display: flex;
                 align-items: center;
@@ -92,17 +92,18 @@
         </div>
         <article id="articleCapture">
             <header><b>Capture</b></header>
- 
-                <form class="pure-form pure-form-stacked">
-                    <fieldset>
-                        <label for="title">Title</label>
-                        <input type="text" id="title">
-                        <label for="tags">Tags</label>
-                        <input type="text" id="tags">
-                        <span class="pure-form-message">Separate tags by space</span>
-                    </fieldset>
-                </form>
-
+            <form class="pure-form pure-form-stacked">
+                <fieldset>
+                    <label for="title">Title</label>
+                    <input type="text" id="title">
+                    <label for="append-page-title" class="pure-checkbox">
+                        <input type="checkbox" id="append-page-title" />Append page title 
+                    </label>
+                    <label for="tags">Tags</label>
+                    <input type="text" id="tags">
+                    <span class="pure-form-message">Separate tags by space</span>
+                </fieldset>
+            </form>
             <p><span id="link"></span></p>
             <footer>
                 <button id="capture" type="submit" class="pure-button pure-button-primary">Capture</button>
@@ -111,35 +112,36 @@
         </article>
         <article id="articleConfigure" class="hidden">
             <header><b>Configure</b></header>
-
-                <form class="pure-form pure-form-stacked">
-                    <fieldset>
-                        <legend>Credentials</legend>
-                        <label for="hostURL">Host URL</label>
-                        <input type="text" id="hostURL">
-                        <span class="pure-form-message">eg. http(s)://silverbullet.mydomain.com:3000</span>
-                        <label for="token">Token</label>
-                        <input type="password" id="token">
-                        <span class="pure-form-message">The token is set in the environment variable SB_AUTH_TOKEN</span>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Options</legend>
-                        <label for="directory">Directory</label>
-                        <input type="text" id="directory">
-                        <span class="pure-form-message">Directory in Silverbullet to store quick notes</span>
-                    </fieldset>
-                    <fieldset>
-                        <legend>About</legend>
-                        <label for="directory">SilverBullet Clipper</label>
-                        <p>
-                            <a href="https://github.com/davecburke/silverbullet-clipper" target="_blank">
-                                <img alt="GitHub Release" src="https://img.shields.io/github/v/release/davecburke/silverbullet-clipper?style=for-the-badge&logo=github">
-                            </a>    
-                        </p>    
-
-                    </fieldset>
-                </form>
-
+            <form class="pure-form pure-form-stacked">
+                <fieldset>
+                    <legend>Credentials</legend>
+                            <label for="hostURL">Host URL</label>
+                            <input type="text" id="hostURL">
+                            <span class="pure-form-message">eg. http(s)://silverbullet.mydomain.com:3000</span>
+                            <label for="token">Token</label>
+                    <input type="password" id="token">
+                    <span class="pure-form-message">The token is set in the environment variable SB_AUTH_TOKEN</span>
+                </fieldset>
+                <fieldset>
+                    <legend>Options</legend>
+                    <label for="directory">Directory</label>
+                    <input type="text" id="directory">
+                    <span class="pure-form-message">Directory in Silverbullet to store quick notes</span>
+                    <label for="append-page-title-default" class="pure-checkbox">
+                        <input type="checkbox" id="append-page-title-default"/>Append Page Title 
+                    </label>
+                    <span class="pure-form-message">When ticked, append page title is defaulted to true</span>
+                </fieldset>
+                <fieldset>
+                    <legend>About</legend>
+                    <label for="directory">SilverBullet Clipper</label>
+                    <p>
+                        <a href="https://github.com/davecburke/silverbullet-clipper" target="_blank">
+                            <img alt="GitHub Release" src="https://img.shields.io/github/v/release/davecburke/silverbullet-clipper?style=for-the-badge&logo=github">
+                        </a>    
+                    </p>    
+                </fieldset>
+            </form>
             <footer>
                 <button id="save" type="submit" class="pure-button pure-button-primary">Save</button>
                 <button id="close" type="submit" class="pure-button button-secondary float-right">Close</button>
