@@ -4,11 +4,47 @@ async function getTextFromSelection(tabId) {
     return new Promise((resolve, reject) => {
         browser.tabs.executeScript(tabId, {
             code: `
-                var range = window.getSelection().getRangeAt(0);
-                var div = document.createElement('div');
-                div.appendChild(range.cloneContents());
-                var html = div.innerHTML;
-                html;
+                function makeUrlsAbsolute(html, baseUrl) {
+                    var div = document.createElement('div');
+                    div.innerHTML = html;
+
+                    var baseElement = document.createElement('base');
+                    baseElement.href = baseUrl;
+                    div.prepend(baseElement);
+
+                    // Resolve relative URLs to absolute URLs
+                    var elements = div.querySelectorAll('[src], [href]');
+                    elements.forEach(function(el) {
+                        if (el.hasAttribute('href')) {
+                            el.href = new URL(el.getAttribute('href'), baseUrl).href;
+                        }
+                        if (el.hasAttribute('src')) {
+                            el.src = new URL(el.getAttribute('src'), baseUrl).href;
+                        }
+                    });
+
+                    baseElement.remove(); // Remove the base element after processing
+                    return div.innerHTML;
+                }
+
+                var selection = window.getSelection();
+                var absoluteHtml;
+
+                if (selection.rangeCount > 0) {
+                    var range = selection.getRangeAt(0);
+                    var div = document.createElement('div');
+                    div.appendChild(range.cloneContents());
+                    var html = div.innerHTML;
+
+                    // Process text with makeUrlsAbsolute
+                    absoluteHtml = makeUrlsAbsolute(html, document.location.href);
+                } else {
+                    // If no text is selected, return null
+                    absoluteHtml = null;
+                }
+
+                // Return the processed HTML with absolute URLs or null if no text selected
+                absoluteHtml;
             `
         })
         .then(result => {
@@ -19,6 +55,7 @@ async function getTextFromSelection(tabId) {
         });
     });
 }
+
 
 /* Get the title of the web page from the tab */
 async function getTitleFromTab(tabId) {

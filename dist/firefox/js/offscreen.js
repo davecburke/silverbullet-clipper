@@ -33,10 +33,12 @@ function convertToMarkdown(htmlString, url, title, tags) {
         tagsMarkdown += '</p>'
     }
     if(htmlString != null) { //If there is HTML then create the markdown using the tags and creating a line for the source URL of the capture
-        markdown = turndownService.turndown(tagsMarkdown + htmlString + '<p>source: ' + url + '</p>');
+        markdown = turndownService.turndown(tagsMarkdown + htmlString + '<p>source: urlPlaceholder</p>');
     } else { //If there is no HTML then just capture the tab URL and any tags
-        markdown = turndownService.turndown(tagsMarkdown + '<p>' + url + '</p>');
+        markdown = turndownService.turndown(tagsMarkdown + '<p>urlPlaceholder</p>');
     }
+    //The turndown service escapes any markdown characters in the URL and breaks the link so add the url after markdown coversion
+    markdown = markdown.replace("urlPlaceholder", url)
     //Send the markdown to the service worker
     sendToServiceWorker(
         'convert-to-markdown-result',

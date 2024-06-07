@@ -5,17 +5,52 @@ async function getTextFromSelection(tabId) {
         chrome.scripting.executeScript({
             target: { tabId: tabId },
             function: () => {
-                var range = window.getSelection().getRangeAt(0);
-                var div = document.createElement('div');
-                div.appendChild(range.cloneContents());
-                var html = div.innerHTML;
-                return html;
-            },
-        }, (result) => {
+                function makeUrlsAbsolute(html, baseUrl) {
+                    const div = document.createElement('div');
+                    div.innerHTML = html;
+                    const baseElement = document.createElement('base');
+                    baseElement.href = baseUrl;
+                    div.prepend(baseElement);
+
+                    const elements = div.querySelectorAll('[src], [href]');
+                    elements.forEach((el) => {
+                        if (el.hasAttribute('href')) {
+                            el.href = new URL(el.getAttribute('href'), baseUrl).href;
+                        }
+                        if (el.hasAttribute('src')) {
+                            el.src = new URL(el.getAttribute('src'), baseUrl).href;
+                        }
+                    });
+
+                    baseElement.remove();
+                    return div.innerHTML;
+                }
+
+                try {
+                    const selection = window.getSelection();
+                    if (!selection.rangeCount) {
+                        throw new Error('No selection range found');
+                    }
+                    const range = selection.getRangeAt(0);
+                    const div = document.createElement('div');
+                    div.appendChild(range.cloneContents());
+                    const html = div.innerHTML;
+                    const absoluteHtml = makeUrlsAbsolute(html, document.location.href);
+                    return absoluteHtml;
+                } catch (error) {
+                    console.error('Error getting selection:', error);
+                    return null;
+                }
+            }
+        }, (results) => {
             if (chrome.runtime.lastError) {
+                console.error('Script execution error:', chrome.runtime.lastError);
                 reject(chrome.runtime.lastError);
+            } else if (results && results[0] && results[0].result) {
+                resolve(results[0].result);
             } else {
-                resolve(result[0].result);
+                console.warn('No result returned from script execution');
+                resolve(null);
             }
         });
     });
