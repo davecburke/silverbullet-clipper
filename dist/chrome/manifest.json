@@ -1,6 +1,6 @@
 {
     "name": "SilverBullet Clipper",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "manifest_version": 3,
     "description": "SilverBullet Clipper captures a web page URL or selected content, converts it to markdown and saves it in the SilverBullet Inbox",
     "icons": {
@@ -21,7 +21,7 @@
     "background": {
         "service_worker": "js/service-worker.js"
     },
-    "permissions": ["activeTab", "scripting","storage","offscreen"],
+    "permissions": ["activeTab", "scripting","storage","offscreen","tabs"],
     "host_permissions": ["*://*/*"]
     
 }

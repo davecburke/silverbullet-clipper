@@ -133,6 +133,10 @@ SilverBullet Clipper uses the following libraries:
 - Storage: used to save extension options.
 
 # Version History
+## 1.1.2
+
+- Added tabs permission to fix some sporadic errors where the captured tab was undefined
+
 ## 1.1.1
 
 - Fixed broken links when capturing web page content. The links were relative but now are fully qualified

@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-    const version = '1.1.1';
+    const version = '1.1.2';
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -14,7 +14,7 @@ module.exports = function(grunt) {
                         version: version,
                         manifestVersion: 3,
                         background: '"service_worker": "js/service-worker.js"',
-                        permissions: '["activeTab", "scripting","storage","offscreen"]',
+                        permissions: '["activeTab", "scripting","storage","offscreen","tabs"]',
                         hostPermissions: '"host_permissions": ["*://*/*"]'
                     
                     }
@@ -68,7 +68,7 @@ module.exports = function(grunt) {
                         manifestVersion: 2,
                         action: 'browser_',
                         background: '"scripts": ["js/service-worker.js"]',
-                        permissions: '["<all_urls>","activeTab","storage"]',
+                        permissions: '["<all_urls>","activeTab","storage","tabs"]',
                         browserSpecificSettings: '"browser_specific_settings": {"gecko": {"id": "silverbullet-clipper@burke.ext","strict_min_version": "100.0"}}'
                     }
                 },
