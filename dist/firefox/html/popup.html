@@ -97,11 +97,14 @@
                     <label for="title">Title</label>
                     <input type="text" id="title">
                     <label for="append-page-title" class="pure-checkbox">
-                        <input type="checkbox" id="append-page-title" />Append Page Title 
+                        <input type="checkbox" id="append-page-title" /> Append Page Title 
                     </label>
                     <label for="tags">Tags</label>
                     <input type="text" id="tags">
                     <span class="pure-form-message">Separate tags by space</span>
+                    <label for="save-metadata-as-frontmatter" class="pure-checkbox">
+                        <input type="checkbox" id="save-metadata-as-frontmatter" /> Save Page Metadata as Frontmatter 
+                    </label>
                 </fieldset>
             </form>
             <p><span id="link"></span></p>
@@ -128,9 +131,13 @@
                     <input type="text" id="directory">
                     <span class="pure-form-message">Directory in Silverbullet to store quick notes</span>
                     <label for="append-page-title-default" class="pure-checkbox">
-                        <input type="checkbox" id="append-page-title-default"/>Append Page Title 
+                        <input type="checkbox" id="append-page-title-default"/> Append Page Title 
                     </label>
                     <span class="pure-form-message">When ticked, append page title is defaulted to true</span>
+                    <label for="save-metadata-as-frontmatter-default" class="pure-checkbox">
+                        <input type="checkbox" id="save-metadata-as-frontmatter-default"/> Save Page Metadata as Frontmatter 
+                    </label>
+                    <span class="pure-form-message">When ticked, save page metadata as frontmatter is defaulted to true</span>
                     <label for="max-title-length">Max. Title Length</label>
                     <input type="text" id="max-title-length">
                     <span class="pure-form-message">Controls the length of the note title</span>

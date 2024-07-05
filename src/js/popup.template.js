@@ -33,11 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const token = document.getElementById("token").value;
         const directory = document.getElementById('directory').value;
         const appendPageTitleDefault = document.getElementById('append-page-title-default').checked;
+        const saveMetadataAsFrontmatterDefault = document.getElementById('save-metadata-as-frontmatter-default').checked;
         const maxTitleLength = document.getElementById("max-title-length").value;
-        <%= runTime %>.storage.sync.set({ "hostURL": hostURL, "token": token, "directory": directory, "appendPageTitleDefault": appendPageTitleDefault, "maxTitleLength": maxTitleLength }, () => {
+        <%= runTime %>.storage.sync.set({ "hostURL": hostURL, "token": token, "directory": directory, "appendPageTitleDefault": appendPageTitleDefault, "maxTitleLength": maxTitleLength, "saveMetadataAsFrontmatterDefault": saveMetadataAsFrontmatterDefault }, () => {
             hideConfigure();
             showCapture();
             document.getElementById('append-page-title').checked = appendPageTitleDefault;
+            document.getElementById('save-metadata-as-frontmatter').checked = saveMetadataAsFrontmatterDefault;
         });
     });
     //Capture button event
@@ -48,7 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const title = document.getElementById("title").value;
         const tags = document.getElementById("tags").value;
         const appendPageTitle = document.getElementById('append-page-title').checked;
-        let data = {'title': title, 'tags': tags, 'appendPageTitle': appendPageTitle};
+        const saveMetadataAsFrontmatter = document.getElementById('save-metadata-as-frontmatter').checked;
+        let data = {'title': title, 'tags': tags, 'appendPageTitle': appendPageTitle, "saveMetadataAsFrontmatter": saveMetadataAsFrontmatter};
         //Tell the service worker to capture the tab
         sendToServiceWorker('capture',data);
     });
@@ -66,16 +69,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     displayTitle();
     //Prompt to provide credentials if they are missing
-    <%= runTime %>.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault"]).then(items => {
+    <%= runTime %>.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault", "saveMetadataAsFrontmatterDefault"]).then(items => {
         if(items === null || items.hostURL === null || items.hostURL === '' 
             || items.token === null || items.token === '' 
             || items.directory === null || items.directory === '') 
         {
             hideCapture();
             showConfigure();
-        } else if(items !== null && items.appendPageTitleDefault !== null && items.appendPageTitleDefault) {
-            document.getElementById('append-page-title').checked = items.appendPageTitleDefault;
-        }
+        } else if(items !== null) {
+            if(items.appendPageTitleDefault !== null && items.appendPageTitleDefault) {
+                document.getElementById('append-page-title').checked = items.appendPageTitleDefault;
+            }
+            if(items.saveMetadataAsFrontmatterDefault !== null && items.saveMetadataAsFrontmatterDefault) {
+                document.getElementById('save-metadata-as-frontmatter').checked = items.saveMetadataAsFrontmatterDefault;
+            }
+        } 
     }).catch(error => {
         console.error('Error retrieving storage:', error);
     });
@@ -88,11 +96,12 @@ function showConfigure() {
         configure.classList.remove("hidden");
     }
     //Get the hostURL and token from storage
-    <%= runTime %>.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault", "maxTitleLength"], (items) => {
+    <%= runTime %>.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault", "maxTitleLength", "saveMetadataAsFrontmatterDefault"], (items) => {
         document.getElementById('hostURL').value = items?.hostURL || '';
         document.getElementById('token').value = items?.token || '';
         document.getElementById('directory').value = items.directory || 'Inbox';
         document.getElementById('append-page-title-default').checked = items.appendPageTitleDefault;
+        document.getElementById('save-metadata-as-frontmatter-default').checked = items.saveMetadataAsFrontmatterDefault;
         document.getElementById('max-title-length').value = items.maxTitleLength || '70';
     });
 }

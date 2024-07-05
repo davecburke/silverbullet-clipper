@@ -76,7 +76,7 @@ async function getTitleFromTab(tabId) {
 }
 
 /* Use an offscreen document to parse the captured DOM */
-async function sendMessageToOffscreenDocument(type, data, url, title, tags) {
+async function sendMessageToOffscreenDocument(type, data, url, title, tags, saveMetadataAsFrontmatter) {
     if (!(await hasDocument())) {
         await chrome.offscreen.createDocument({
             url: OFFSCREEN_DOCUMENT_PATH,
@@ -90,7 +90,8 @@ async function sendMessageToOffscreenDocument(type, data, url, title, tags) {
         data,
         url,
         title,
-        tags
+        tags,
+        saveMetadataAsFrontmatter
     });
 }<% } %><% if (taskName === 'firefox') { %>async function getTextFromSelection(tabId) {
     return new Promise((resolve, reject) => {
@@ -165,14 +166,15 @@ async function getTitleFromTab(tabId) {
 }
 
 /* Use an offscreen document to parse the captured DOM */
-function sendMessageToOffscreenDocument(type, data, url, title, tags) {
+function sendMessageToOffscreenDocument(type, data, url, title, tags, saveMetadataAsFrontmatter) {
     browser.runtime.sendMessage({
         type,
         target: 'offscreen',
         data,
         url,
         title,
-        tags
+        tags,
+        saveMetadataAsFrontmatter
     });
 }
 <% } %>
@@ -192,7 +194,7 @@ async function handleMessages(message) {
             break;
         case 'capture':
             //Capture the user selection
-            captureTab(message.data.title, message.data.tags, message.data.appendPageTitle);
+            captureTab(message.data.title, message.data.tags, message.data.appendPageTitle, message.data.saveMetadataAsFrontmatter);
             break;            
         default:
         console.warn(`Unexpected message type received: '${message.type}'.`);
@@ -200,7 +202,7 @@ async function handleMessages(message) {
 }
 
 /* Capture the the tab URL and any selected HTML */
-async function captureTab(title, tags, appendPageTitle) {
+async function captureTab(title, tags, appendPageTitle, saveMetadataAsFrontmatter) {
     let queryOptions = { active: true, lastFocusedWindow: true };
     let [tab] = await <%= runTime %>.tabs.query(queryOptions);
     const url = tab.url;
@@ -224,7 +226,8 @@ async function captureTab(title, tags, appendPageTitle) {
             text,
             url,
             title,
-            tags
+            tags,
+            saveMetadataAsFrontmatter
         );
 }
 
