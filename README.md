@@ -24,7 +24,18 @@ The extension is available for **Google Chrome** and **Opera** via the [Chrome W
 
 1. The title of the page as it will appear in SilverBullet. This mimics the title of a page created by the SilverBullet "Quick Note" button.
 2. When the Append Page Title is selected, the web page title will be added to the title entered in (1.1). This is defaulted to off but can be defaulted to on via the configure page (2.4). The page title will be enclosed in brackets. Eg 2024-05-31 16:28:33 (The Age Newspaper).
-3. Multiple tags, separated by spaces, can be added to the page. The tags can be entered with or without a leading hash. For example, this is a valid entry: tag1 #tag2 tag3
+3. Multiple tags, separated by spaces, can be added to the page. The tags can be entered with or without a leading hash. For example, this is a valid entry: tag1 tag2 #tag3
+4. When the Save Page Metadata as Frontmatter is selected, the page metadata is saved as frontmatter. This includes the tags. eg
+```
+---
+source-title: 2024-07-05 17-31-32 (UK elections- Celebrations will be short-liv...)
+source-url: https://www.theage.com.au/world/europe/celebrations-will-be-short-lived-for-starmer-staring-down-britain-s-monumental-challenges-20240705-p5jra2.html
+created-date: 2024-07-05
+tags:
+- uk
+- election
+---
+```
 
 ## 2. The Configure Page
 
@@ -57,7 +68,8 @@ The extension is available for **Google Chrome** and **Opera** via the [Chrome W
 
 3. The directory is where your page will be created in SilverBullet. The default directory is Inbox as this is the directory that the SilverBullet Quick Note uses.
 4. When the Append Page Title is selected, the Append Page Title check box on the Capture page (1.2) will default to selected.
-5. The Max. Title Length determines how long the note's title will be. This is defaulted to 70 characters. If the note title exceeds this length, '...' will indicate that the title has been concatenated. Eg 2024-05-31 16:28:33 (The Age Newspaper Melbourne Aus...)
+5. When the Save Page Metadata as Frontmatter is selected, the Save Page Metadata as Frontmatter is selected check box on the Capture page (1.4) will default to selected.
+6. The Max. Title Length determines how long the note's title will be. This is defaulted to 70 characters. If the note title exceeds this length, '...' will indicate that the title has been concatenated. Eg 2024-05-31 16:28:33 (The Age Newspaper Melbourne Aus...)
 
 # Build & Testing
 
@@ -133,6 +145,10 @@ SilverBullet Clipper uses the following libraries:
 - Storage: used to save extension options.
 
 # Version History
+## 1.2.0
+
+- Added ability to save page metadata as frontmatter
+
 ## 1.1.2
 
 - Added tabs permission to fix some sporadic errors where the captured tab was undefined
