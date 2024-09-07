@@ -171,7 +171,7 @@ async function hasDocument() {
 function sendCaptureToEndpoint(markdown, title) {
     chrome.storage.sync.get(["hostURL", "token", "directory"], (items) => {
         items.directory = (items.directory == null)?'Inbox':items.directory;
-        const link = items.hostURL + '/' + items.directory + '/' + encodeURI(title);
+        const link = items.hostURL + '/' + items.directory + '/' + getDateStamp(new Date()) + '/' + encodeURI(title);
         const endpoint = link + '.md';
         const requestOptions = {
             method: 'PUT',
@@ -205,4 +205,9 @@ function sendCaptureToEndpoint(markdown, title) {
             });
         });
     });
+}
+
+/* Get the current date stamp */
+function getDateStamp(date) {
+    return date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2,'0') + '-' + date.getDate().toString().padStart(2,'0');
 }

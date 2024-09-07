@@ -23,12 +23,12 @@ The extension is available for **Google Chrome** and **Opera** via the [Chrome W
 ![Capture Page](images/silverbullet_main.png)
 
 1. The title of the page as it will appear in SilverBullet. This mimics the title of a page created by the SilverBullet "Quick Note" button.
-2. When the Append Page Title is selected, the web page title will be added to the title entered in (1.1). This is defaulted to off but can be defaulted to on via the configure page (2.4). The page title will be enclosed in brackets. Eg 2024-05-31 16:28:33 (The Age Newspaper).
+2. When the Append Page Title is selected, the web page title will be added to the title entered in (1.1). This is defaulted to off but can be defaulted to on via the configure page (2.4). The page title will be enclosed in brackets. Eg 18-19-21 (The Age Newspaper).
 3. Multiple tags, separated by spaces, can be added to the page. The tags can be entered with or without a leading hash. For example, this is a valid entry: tag1 tag2 #tag3
 4. When the Save Page Metadata as Frontmatter is selected, the page metadata is saved as frontmatter. This includes the tags. eg
 ```
 ---
-source-title: 2024-07-05 17-31-32 (UK elections- Celebrations will be short-liv...)
+source-title: 17-31-32 (UK elections- Celebrations will be short-liv...)
 source-url: https://www.theage.com.au/world/europe/celebrations-will-be-short-lived-for-starmer-staring-down-britain-s-monumental-challenges-20240705-p5jra2.html
 created-date: 2024-07-05
 tags:
@@ -145,6 +145,11 @@ SilverBullet Clipper uses the following libraries:
 - Storage: used to save extension options.
 
 # Version History
+## 1.2.1
+
+- Changed where the page is saved in SilverBullet to match SilverBullet's new Inbox file structure. The page was saved in the Inbox folder with the datetime stamp as the default page name. eg 2024-09-07 16:08:45. The new structure is Inbox/yyyy-mm-dd/hh-mm-ss.md. eg Inbox/2024-09-07/16-08-45
+- Changed the separator for the time from a colon to a dash. This is to match how SilverBullet now formats the time and fix an issue where using a colon appears to cause an error.
+
 ## 1.2.0
 
 - Added ability to save page metadata as frontmatter

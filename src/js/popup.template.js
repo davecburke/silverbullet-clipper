@@ -132,12 +132,12 @@ function hideCapture() {
 
 /* Display the default timestamp title */
 function displayTitle() {
-    document.getElementById('title').value = getDatetimeStamp(new Date());
+    document.getElementById('title').value = getTimeStamp(new Date());
 }
 
 /* Get the current timestamp */
-function getDatetimeStamp(datetime) {
-    return datetime.getFullYear().toString() + '-' + (datetime.getMonth() + 1).toString().padStart(2,'0') + '-' + datetime.getDate().toString().padStart(2,'0') + ' ' + datetime.getHours().toString().padStart(2,'0') + ":" + datetime.getMinutes().toString().padStart(2,'0') + ':' + datetime.getSeconds().toString().padStart(2,'0');
+function getTimeStamp(datetime) {
+    return datetime.getHours().toString().padStart(2,'0') + "-" + datetime.getMinutes().toString().padStart(2,'0') + '-' + datetime.getSeconds().toString().padStart(2,'0');
 }
 
 /* Send a message to the service worker */
