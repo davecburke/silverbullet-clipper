@@ -145,6 +145,11 @@ SilverBullet Clipper uses the following libraries:
 - Storage: used to save extension options.
 
 # Version History
+
+## 1.2.2
+
+- No longer showing config page on start up if the authentication token is missing
+
 ## 1.2.1
 
 - Changed where the page is saved in SilverBullet to match SilverBullet's new Inbox file structure. The page was saved in the Inbox folder with the datetime stamp as the default page name. eg 2024-09-07 16:08:45. The new structure is Inbox/yyyy-mm-dd/hh-mm-ss.md. eg Inbox/2024-09-07/16-08-45
