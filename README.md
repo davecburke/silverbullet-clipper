@@ -149,7 +149,7 @@ SilverBullet Clipper uses the following libraries:
 
 ## 1.2.3
 
-- Added default tags to the configure pages. The tags text box on the capture page will be automatically populated with the default tags defined here. Multiple tags, separated by spaces, can be added to the default tags. The tags can be entered with or without a leading hash. For example, this is a valid entry: tag1 tag2 #tag3
+- Added default tags to the configure page. The tags text box on the capture page will be automatically populated with the default tags defined here. Multiple tags, separated by spaces, can be added to the default tags. The tags can be entered with or without a leading hash. For example, this is a valid entry: tag1 tag2 #tag3
 
 ## 1.2.2
 
