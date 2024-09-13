@@ -70,6 +70,7 @@ tags:
 4. When the Append Page Title is selected, the Append Page Title check box on the Capture page (1.2) will default to selected.
 5. When the Save Page Metadata as Frontmatter is selected, the Save Page Metadata as Frontmatter is selected check box on the Capture page (1.4) will default to selected.
 6. The Max. Title Length determines how long the note's title will be. This is defaulted to 70 characters. If the note title exceeds this length, '...' will indicate that the title has been concatenated. Eg 2024-05-31 16:28:33 (The Age Newspaper Melbourne Aus...)
+6. The tags text box on the capture page will be automatically populated with the default tags defined here. Multiple tags, separated by spaces, can be added to the default tags. The tags can be entered with or without a leading hash. For example, this is a valid entry: tag1 tag2 #tag3
 
 # Build & Testing
 
@@ -145,6 +146,10 @@ SilverBullet Clipper uses the following libraries:
 - Storage: used to save extension options.
 
 # Version History
+
+## 1.2.3
+
+- Added default tags to the configure pages. The tags text box on the capture page will be automatically populated with the default tags defined here. Multiple tags, separated by spaces, can be added to the default tags. The tags can be entered with or without a leading hash. For example, this is a valid entry: tag1 tag2 #tag3
 
 ## 1.2.2
 
