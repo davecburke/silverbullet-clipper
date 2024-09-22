@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-    const version = '1.2.3';
+    const version = '1.2.4';
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),

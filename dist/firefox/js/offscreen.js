@@ -7,7 +7,7 @@ async function handleMessages(message) {
     }
     switch (message.type) {
         case 'convert-to-markdown':
-            convertToMarkdown(message.data, message.url, message.title, message.tags, message.saveMetadataAsFrontmatter);
+            convertToMarkdown(message.data, message.url, message.title, message.pageTitle, message.tags, message.saveMetadataAsFrontmatter);
             break;
         default:
         console.warn(`Unexpected message type received: '${message.type}'.`);
@@ -16,7 +16,7 @@ async function handleMessages(message) {
 }
 
 /* Uses TurndownService to create markdown from a HTML string and user entered tags */
-function convertToMarkdown(htmlString, url, title, tags, saveMetadataAsFrontmatter) {
+function convertToMarkdown(htmlString, url, title, pageTitle, tags, saveMetadataAsFrontmatter) {
     var turndownService = new TurndownService();
     var markdown;
     var tagsMarkdown = '';
@@ -24,6 +24,7 @@ function convertToMarkdown(htmlString, url, title, tags, saveMetadataAsFrontmatt
     if(saveMetadataAsFrontmatter) {
         frontmatter = '---\n';
         frontmatter += 'source-title: ' + title.replaceAll(':','-') + '\n';
+        frontmatter += 'source-page-title: ' + pageTitle + '\n';
         frontmatter += 'source-url: ' + url + '\n';
         frontmatter += 'created-date: ' +  getDateStamp(new Date());
     }
@@ -50,13 +51,14 @@ function convertToMarkdown(htmlString, url, title, tags, saveMetadataAsFrontmatt
             tagsMarkdown += '</p>'
         }
     }
-    if(htmlString != null) { //If there is HTML then create the markdown using the tags and creating a line for the source URL of the capture
-        markdown = turndownService.turndown(((saveMetadataAsFrontmatter)?'':tagsMarkdown) + htmlString + '<p>source: urlPlaceholder</p>');
-    } else { //If there is no HTML then just capture the tab URL and any tags
-        markdown = turndownService.turndown(((saveMetadataAsFrontmatter)?'':tagsMarkdown) + '<p>urlPlaceholder</p>');
+    let markdownText = (saveMetadataAsFrontmatter ? '' : tagsMarkdown);
+    if (htmlString != null) { //If there is HTML then create the markdown using the tags and creating a line for the source URL of the capture
+        markdownText += htmlString;
     }
+    markdown = turndownService.turndown(markdownText + '<p>title: pageTitlePlaceHolder<br>source: urlPlaceholder</p>');
     //The turndown service escapes any markdown characters in the URL and breaks the link so add the url after markdown coversion
     markdown = markdown.replace("urlPlaceholder", url);
+    markdown = markdown.replace("pageTitlePlaceHolder", pageTitle);
     //Add frontmatter if wanted
     if(saveMetadataAsFrontmatter) {
         markdown = frontmatter + '\n' + '---' + '\n\n' + markdown;

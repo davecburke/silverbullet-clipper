@@ -147,6 +147,10 @@ SilverBullet Clipper uses the following libraries:
 
 # Version History
 
+## 1.2.4
+
+- Now adding the page title to the capture. This will show at the bottom of the page above the source and in the frontmatter as source-page-title. Thanks [dklawran](https://github.com/dklawren)
+
 ## 1.2.3
 
 - Added default tags to the configure page. The tags text box on the capture page will be automatically populated with the default tags defined here. Multiple tags, separated by spaces, can be added to the default tags. The tags can be entered with or without a leading hash. For example, this is a valid entry: tag1 tag2 #tag3

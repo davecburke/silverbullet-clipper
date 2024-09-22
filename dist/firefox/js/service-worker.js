@@ -73,12 +73,13 @@ async function getTitleFromTab(tabId) {
 }
 
 /* Use an offscreen document to parse the captured DOM */
-function sendMessageToOffscreenDocument(type, data, url, title, tags, saveMetadataAsFrontmatter) {
+function sendMessageToOffscreenDocument(type, data, url, pageTitle, title, tags, saveMetadataAsFrontmatter) {
     browser.runtime.sendMessage({
         type,
         target: 'offscreen',
         data,
         url,
+        pageTitle,
         title,
         tags,
         saveMetadataAsFrontmatter
@@ -113,11 +114,14 @@ async function captureTab(title, tags, appendPageTitle, saveMetadataAsFrontmatte
     let queryOptions = { active: true, lastFocusedWindow: true };
     let [tab] = await browser.tabs.query(queryOptions);
     const url = tab.url;
+
+    //Get the title of the web page from the tab
+    let pageTitle = await getTitleFromTab(tab.id);
+
     if(appendPageTitle) {
-        //Get the title of the web page from the tab
-        let pageTitle = await getTitleFromTab(tab.id);
         title += ' (' + pageTitle + ')';
     }
+
     const invalidCharactersRegex = /[^a-zA-Z0-9\-_\s\(\):]/g;
     title = title.replace(invalidCharactersRegex,'_');
     browser.storage.sync.get(["maxTitleLength"], (items) => {
@@ -132,6 +136,7 @@ async function captureTab(title, tags, appendPageTitle, saveMetadataAsFrontmatte
             'convert-to-markdown',
             text,
             url,
+            pageTitle,
             title,
             tags,
             saveMetadataAsFrontmatter

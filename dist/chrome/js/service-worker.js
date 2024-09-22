@@ -76,7 +76,7 @@ async function getTitleFromTab(tabId) {
 }
 
 /* Use an offscreen document to parse the captured DOM */
-async function sendMessageToOffscreenDocument(type, data, url, title, tags, saveMetadataAsFrontmatter) {
+async function sendMessageToOffscreenDocument(type, data, url, pageTitle, title, tags, saveMetadataAsFrontmatter) {
     if (!(await hasDocument())) {
         await chrome.offscreen.createDocument({
             url: OFFSCREEN_DOCUMENT_PATH,
@@ -89,6 +89,7 @@ async function sendMessageToOffscreenDocument(type, data, url, title, tags, save
         target: 'offscreen',
         data,
         url,
+        pageTitle,
         title,
         tags,
         saveMetadataAsFrontmatter
@@ -122,11 +123,14 @@ async function captureTab(title, tags, appendPageTitle, saveMetadataAsFrontmatte
     let queryOptions = { active: true, lastFocusedWindow: true };
     let [tab] = await chrome.tabs.query(queryOptions);
     const url = tab.url;
+
+    //Get the title of the web page from the tab
+    let pageTitle = await getTitleFromTab(tab.id);
+
     if(appendPageTitle) {
-        //Get the title of the web page from the tab
-        let pageTitle = await getTitleFromTab(tab.id);
         title += ' (' + pageTitle + ')';
     }
+
     const invalidCharactersRegex = /[^a-zA-Z0-9\-_\s\(\):]/g;
     title = title.replace(invalidCharactersRegex,'_');
     chrome.storage.sync.get(["maxTitleLength"], (items) => {
@@ -141,6 +145,7 @@ async function captureTab(title, tags, appendPageTitle, saveMetadataAsFrontmatte
             'convert-to-markdown',
             text,
             url,
+            pageTitle,
             title,
             tags,
             saveMetadataAsFrontmatter
