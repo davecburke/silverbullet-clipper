@@ -76,7 +76,7 @@ async function getTitleFromTab(tabId) {
 }
 
 /* Use an offscreen document to parse the captured DOM */
-async function sendMessageToOffscreenDocument(type, data, url, pageTitle, title, tags, saveMetadataAsFrontmatter) {
+async function sendMessageToOffscreenDocument(type, data, url, pageTitle, title, tags, saveMetadataAsFrontmatter, sourceTitle) {
     if (!(await hasDocument())) {
         await chrome.offscreen.createDocument({
             url: OFFSCREEN_DOCUMENT_PATH,
@@ -92,7 +92,8 @@ async function sendMessageToOffscreenDocument(type, data, url, pageTitle, title,
         pageTitle,
         title,
         tags,
-        saveMetadataAsFrontmatter
+        saveMetadataAsFrontmatter,
+        sourceTitle
     });
 }
 
@@ -131,6 +132,7 @@ async function captureTab(title, tags, appendPageTitle, saveMetadataAsFrontmatte
         title += ' (' + pageTitle + ')';
     }
 
+    let sourceTitle = title;
     const invalidCharactersRegex = /[^a-zA-Z0-9\-_\s\(\):]/g;
     title = title.replace(invalidCharactersRegex,'_');
     chrome.storage.sync.get(["maxTitleLength"], (items) => {
@@ -148,7 +150,8 @@ async function captureTab(title, tags, appendPageTitle, saveMetadataAsFrontmatte
             pageTitle,
             title,
             tags,
-            saveMetadataAsFrontmatter
+            saveMetadataAsFrontmatter,
+            sourceTitle
         );
 }
 

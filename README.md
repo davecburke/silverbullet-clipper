@@ -147,6 +147,10 @@ SilverBullet Clipper uses the following libraries:
 
 # Version History
 
+## 1.2.5
+
+- Fixed issues caused by invalid YAML characters in Frontmatter
+
 ## 1.2.4
 
 - Now adding the page title to the capture. This will show at the bottom of the page above the source and in the frontmatter as source-page-title. Thanks [dklawran](https://github.com/dklawren)

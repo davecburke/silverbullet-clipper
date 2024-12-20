@@ -7,7 +7,7 @@ async function handleMessages(message) {
     }
     switch (message.type) {
         case 'convert-to-markdown':
-            convertToMarkdown(message.data, message.url, message.title, message.pageTitle, message.tags, message.saveMetadataAsFrontmatter);
+            convertToMarkdown(message.data, message.url, message.title, message.pageTitle, message.tags, message.saveMetadataAsFrontmatter, message.sourceTitle);
             break;
         default:
         console.warn(`Unexpected message type received: '${message.type}'.`);
@@ -16,15 +16,15 @@ async function handleMessages(message) {
 }
 
 /* Uses TurndownService to create markdown from a HTML string and user entered tags */
-function convertToMarkdown(htmlString, url, title, pageTitle, tags, saveMetadataAsFrontmatter) {
+function convertToMarkdown(htmlString, url, title, pageTitle, tags, saveMetadataAsFrontmatter, sourceTitle) {
     var turndownService = new TurndownService();
     var markdown;
     var tagsMarkdown = '';
     var frontmatter = '';
     if(saveMetadataAsFrontmatter) {
         frontmatter = '---\n';
-        frontmatter += 'source-title: ' + title.replaceAll(':','-') + '\n';
-        frontmatter += 'source-page-title: ' + pageTitle + '\n';
+        frontmatter += 'source-title: ' + sanitizeYamlString(sourceTitle) + '\n';
+        frontmatter += 'source-page-title: ' + sanitizeYamlString(pageTitle) + '\n';
         frontmatter += 'source-url: ' + url + '\n';
         frontmatter += 'created-date: ' +  getDateStamp(new Date());
     }
@@ -84,4 +84,19 @@ function sendToServiceWorker(type, data, title) {
         data,
         title
     });
+}
+
+function sanitizeYamlString(string) {
+    const specialChars = [':', '-', '?', '{', '}', '[', ']', ',', '#', '&', '*', '!', '|', '>', "'", '"', '%', '@', '`'];
+    
+    // Check if the string contains any special YAML characters
+    if (specialChars.some(char => string.includes(char))) {
+        // Use double quotes if the string contains single quotes
+        if (string.includes("'")) {
+            return `"${string}"`;
+        }
+        // Otherwise, use single quotes
+        return `'${string}'`;
+    }
+    return string;
 }

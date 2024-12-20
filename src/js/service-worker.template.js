@@ -76,7 +76,7 @@ async function getTitleFromTab(tabId) {
 }
 
 /* Use an offscreen document to parse the captured DOM */
-async function sendMessageToOffscreenDocument(type, data, url, pageTitle, title, tags, saveMetadataAsFrontmatter) {
+async function sendMessageToOffscreenDocument(type, data, url, pageTitle, title, tags, saveMetadataAsFrontmatter, sourceTitle) {
     if (!(await hasDocument())) {
         await chrome.offscreen.createDocument({
             url: OFFSCREEN_DOCUMENT_PATH,
@@ -92,7 +92,8 @@ async function sendMessageToOffscreenDocument(type, data, url, pageTitle, title,
         pageTitle,
         title,
         tags,
-        saveMetadataAsFrontmatter
+        saveMetadataAsFrontmatter,
+        sourceTitle
     });
 }<% } %><% if (taskName === 'firefox') { %>async function getTextFromSelection(tabId) {
     return new Promise((resolve, reject) => {
@@ -167,7 +168,7 @@ async function getTitleFromTab(tabId) {
 }
 
 /* Use an offscreen document to parse the captured DOM */
-function sendMessageToOffscreenDocument(type, data, url, pageTitle, title, tags, saveMetadataAsFrontmatter) {
+function sendMessageToOffscreenDocument(type, data, url, pageTitle, title, tags, saveMetadataAsFrontmatter, sourceTitle) {
     browser.runtime.sendMessage({
         type,
         target: 'offscreen',
@@ -176,7 +177,8 @@ function sendMessageToOffscreenDocument(type, data, url, pageTitle, title, tags,
         pageTitle,
         title,
         tags,
-        saveMetadataAsFrontmatter
+        saveMetadataAsFrontmatter,
+        sourceTitle
     });
 }
 <% } %>
@@ -216,6 +218,7 @@ async function captureTab(title, tags, appendPageTitle, saveMetadataAsFrontmatte
         title += ' (' + pageTitle + ')';
     }
 
+    let sourceTitle = title;
     const invalidCharactersRegex = /[^a-zA-Z0-9\-_\s\(\):]/g;
     title = title.replace(invalidCharactersRegex,'_');
     <%= runTime %>.storage.sync.get(["maxTitleLength"], (items) => {
@@ -233,7 +236,8 @@ async function captureTab(title, tags, appendPageTitle, saveMetadataAsFrontmatte
             pageTitle,
             title,
             tags,
-            saveMetadataAsFrontmatter
+            saveMetadataAsFrontmatter,
+            sourceTitle
         );
 }
 
