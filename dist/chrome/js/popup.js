@@ -24,6 +24,30 @@ async function handleMessages(message) {
     }
 }
 
+document.getElementById('capture-clipboard').addEventListener('click', async () => {
+    try {
+        const clipboardItems = await navigator.clipboard.read();
+        for (const item of clipboardItems) {
+            if (item.types.includes('text/html')) {
+                const blob = await item.getType('text/html');
+                const html = await blob.text();
+                const linkSpan = document.getElementById("link");
+                linkSpan.textContent = '';
+                const title = document.getElementById("title").value;
+                const tags = document.getElementById("tags").value;
+                const appendPageTitle = document.getElementById('append-page-title').checked;
+                const saveMetadataAsFrontmatter = document.getElementById('save-metadata-as-frontmatter').checked;
+                let data = {'title': title, 'tags': tags, 'appendPageTitle': appendPageTitle, "saveMetadataAsFrontmatter": saveMetadataAsFrontmatter, 'clipboardHTML': html};
+                //Tell the service worker to capture the clipboard
+                sendToServiceWorker('capture-clipboard',data);
+                return;
+            }
+        }
+    } catch (err) {
+        console.error('Failed to read clipboard:', err);
+    }
+});
+
 /* On document load */
 document.addEventListener("DOMContentLoaded", () => {
     //Credentials save button event
@@ -44,9 +68,9 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('tags').value = defaultTags;
         });
     });
-    //Capture button event
-    const captureButton = document.getElementById("capture");
-    captureButton.addEventListener("click", () => {
+    //Capture Page button event
+    const capturePageButton = document.getElementById("capture-page");
+    capturePageButton.addEventListener("click", () => {
         const linkSpan = document.getElementById("link");
         linkSpan.textContent = '';
         const title = document.getElementById("title").value;
@@ -55,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const saveMetadataAsFrontmatter = document.getElementById('save-metadata-as-frontmatter').checked;
         let data = {'title': title, 'tags': tags, 'appendPageTitle': appendPageTitle, "saveMetadataAsFrontmatter": saveMetadataAsFrontmatter};
         //Tell the service worker to capture the tab
-        sendToServiceWorker('capture',data);
+        sendToServiceWorker('capture-page',data);
     });
     //Credentials close button event
     const closeButton = document.getElementById("close");

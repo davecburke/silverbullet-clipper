@@ -4,9 +4,9 @@
 
 [SilverBullet](https://silverbullet.md/) by Zef Hemel is an awesome note-taking application optimized for people with a hacker mindset.
 
-SilverBullet Clipper is a browser extension that allows you to save either a URL or selected content from a page as markdown to SilverBullet. By default, the capture is added as a Quick Note in the default SilverBullet inbox. Please keep in mind that it is not guaranteed to work on all websites.
+SilverBullet Clipper is a browser extension that allows you to save either a URL, selected content from a page or the contents of the clipboard as markdown to SilverBullet. By default, the capture is added as a Quick Note in the default SilverBullet inbox. Please keep in mind that it is not guaranteed to work on all websites.
 
-To use this add-on, simply click the extension icon while you are browsing the page you want to capture. If you've highlighted content on the page, the highlighted content will be saved to SilverBullet. If no content is highlighted, just the page URL will be saved to SilverBullet. A popup will allow you to change the page title from the default timestamp and add any tags that you want to the page.
+To use this add-on, simply click the extension icon while you are browsing the page you want to capture. If you click the Capture Page button, anything you've highlighted on the page will be saved to SilverBullet. If no content is highlighted, just the page URL will be saved to SilverBullet. If you click the Capture Clipboard button, the contents of your clipboard will be saved to SilverBullet. A popup will allow you to change the page title from the default timestamp and add any tags that you want to the page.
 
 # Installation
 
@@ -144,8 +144,12 @@ SilverBullet Clipper uses the following libraries:
 - Offscreen: used to open a hidden document where the captured HTML can be processed.
 - Scripting: used to access the chrome scripting API that captures the web page content selected.
 - Storage: used to save extension options.
+- Clipboard read: used to access the clipboard contents
 
 # Version History
+## 1.2.6
+
+- Added ability to capture the contents of the clipboard
 
 ## 1.2.5
 

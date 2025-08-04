@@ -53,7 +53,7 @@
                     color: black;
                 }
             }
-
+            
             .banner {
                 display: flex;
                 align-items: center;
@@ -79,6 +79,11 @@
             .hidden {
                 display: none;
             }
+            .pure-g > .pure-u-1 > p > button {
+                width: 100%;
+            }
+
+
         </style>
     </head>
     <body>
@@ -109,8 +114,11 @@
             </form>
             <p><span id="link"></span></p>
             <footer>
-                <button id="capture" type="submit" class="pure-button pure-button-primary">Capture</button>
-                <button id="configure" type="submit" class="pure-button button-secondary float-right">Configure</button>
+                <div class="pure-g">
+                    <div class="pure-u-1"><p><button id="capture-page" type="submit" class="pure-button pure-button-primary">Capture Page</button></p></div>
+                    <div class="pure-u-1"><p><button id="capture-clipboard" type="submit" class="pure-button pure-button-primary">Capture Clipboard</button></p></div>
+                    <div class="pure-u-1"><p><button id="configure" type="submit" class="pure-button button-secondary ">Configure</button></p></div>
+                </div>
             </footer>
         </article>
         <article id="articleConfigure" class="hidden">

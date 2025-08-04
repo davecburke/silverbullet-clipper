@@ -196,16 +196,20 @@ async function handleMessages(message) {
             sendCaptureToEndpoint(message.data, message.title);
             <% if (taskName === 'chrome') { %>closeOffscreenDocument();<% } %>
             break;
-        case 'capture':
+        case 'capture-page':
             //Capture the user selection
             captureTab(message.data.title, message.data.tags, message.data.appendPageTitle, message.data.saveMetadataAsFrontmatter);
-            break;            
+            break;
+        case 'capture-clipboard':
+            //Capture the user clipboard
+            captureClipboard(message.data.title, message.data.tags, message.data.appendPageTitle, message.data.saveMetadataAsFrontmatter, message.data.clipboardHTML);
+            break;                
         default:
         console.warn(`Unexpected message type received: '${message.type}'.`);
     }
 }
 
-/* Capture the the tab URL and any selected HTML */
+/* Capture the tab URL and any selected HTML */
 async function captureTab(title, tags, appendPageTitle, saveMetadataAsFrontmatter) {
     let queryOptions = { active: true, lastFocusedWindow: true };
     let [tab] = await <%= runTime %>.tabs.query(queryOptions);
@@ -241,6 +245,40 @@ async function captureTab(title, tags, appendPageTitle, saveMetadataAsFrontmatte
         );
 }
 
+/* Capture the clipboard */
+async function captureClipboard(title, tags, appendPageTitle, saveMetadataAsFrontmatter, clipboardHTML) {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    let [tab] = await <%= runTime %>.tabs.query(queryOptions);
+    const url = tab.url;
+
+    //Get the title of the web page from the tab
+    let pageTitle = await getTitleFromTab(tab.id);
+
+    if(appendPageTitle) {
+        title += ' (' + pageTitle + ')';
+    }
+
+    let sourceTitle = title;
+    const invalidCharactersRegex = /[^a-zA-Z0-9\-_\s\(\):]/g;
+    title = title.replace(invalidCharactersRegex,'_');
+    <%= runTime %>.storage.sync.get(["maxTitleLength"], (items) => {
+        let maxTitleLength = Number(items.maxTitleLength || '70');
+        if (Number.isInteger(maxTitleLength) && maxTitleLength > 0) {
+            title = (title.length > maxTitleLength)?title.substring(0,maxTitleLength - 5) + '...)':title;    
+        }
+    });
+    
+    sendMessageToOffscreenDocument(
+        'convert-to-markdown',
+        clipboardHTML,
+        url,
+        pageTitle,
+        title,
+        tags,
+        saveMetadataAsFrontmatter,
+        sourceTitle
+    );     
+}
 <% if (taskName === 'chrome') { %>
 /* Close the offscreen document */
 async function closeOffscreenDocument() {
