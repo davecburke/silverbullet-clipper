@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-    const version = '1.2.5';
+    const version = '1.2.6';
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -122,7 +122,9 @@ module.exports = function(grunt) {
                     {expand: true, src: ['src/images/**'], dest: 'dist/chrome/images/', flatten: true, filter: 'isFile'},
                     {expand: true, src: ['src/images/**'], dest: 'dist/firefox/images', flatten: true, filter: 'isFile'},
                     {expand: true, src: ['src/js/turndown.js'], dest: 'dist/chrome/js', flatten: true, filter: 'isFile'},
-                    {expand: true, src: ['src/js/turndown.js'], dest: 'dist/firefox/js', flatten: true, filter: 'isFile'}
+                    {expand: true, src: ['src/js/turndown.js'], dest: 'dist/firefox/js', flatten: true, filter: 'isFile'},
+                    {expand: true, src: ['src/js/Readability.js'], dest: 'dist/chrome/js', flatten: true, filter: 'isFile'},
+                    {expand: true, src: ['src/js/Readability.js'], dest: 'dist/firefox/js', flatten: true, filter: 'isFile'}
                 ] 
             },
             chrome_files: {

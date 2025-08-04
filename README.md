@@ -135,6 +135,7 @@ The Firefox extension can be found in the dist/firefox folder. Detailed instruct
 SilverBullet Clipper uses the following libraries:
 
 - [PureCSS](https://purecss.io/) by Pure CSS. Version 3.0.0 is used to provide styling to the extension. (Licensed under Yahoo! Inc. BSD-3-Clause license)
+- [Readability](https://github.com/mozilla/readability) by Mozilla. A standalone version of the readability library used for Firefox Reader View.
 - [Turndown](https://github.com/mixmark-io/turndown) by Dom Christie. Version 7.1.3 is used to convert the HTML into markdown. (Licensed under MIT License)
 - [Shields.io](https://shields.io/) by Badges. Provides the version badges for git, chrome and firefox on this page
 
@@ -146,6 +147,9 @@ SilverBullet Clipper uses the following libraries:
 - Storage: used to save extension options.
 
 # Version History
+## 1.2.6
+
+- Added Readability to try and clean up the HTML before passing it do Turndown
 
 ## 1.2.5
 

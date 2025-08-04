@@ -1,4 +1,3 @@
-import TurndownService from './turndown.js';
 /* Listener for offscreen */
 chrome.runtime.onMessage.addListener(handleMessages);
 async function handleMessages(message) {
@@ -17,6 +16,12 @@ async function handleMessages(message) {
 
 /* Uses TurndownService to create markdown from a HTML string and user entered tags */
 function convertToMarkdown(htmlString, url, title, pageTitle, tags, saveMetadataAsFrontmatter, sourceTitle) {
+    const parser = new DOMParser();
+    const htmlDocString = '<!DOCTYPE html><html><body>' + htmlString + '</body></html>';
+    const doc = parser.parseFromString(htmlDocString, 'text/html');
+    var reader = new Readability(doc);
+    var article = reader.parse();
+    
     var turndownService = new TurndownService();
     var markdown;
     var tagsMarkdown = '';
@@ -52,8 +57,8 @@ function convertToMarkdown(htmlString, url, title, pageTitle, tags, saveMetadata
         }
     }
     let markdownText = (saveMetadataAsFrontmatter ? '' : tagsMarkdown);
-    if (htmlString != null) { //If there is HTML then create the markdown using the tags and creating a line for the source URL of the capture
-        markdownText += htmlString;
+    if (article.content != null) { //If there is HTML then create the markdown using the tags and creating a line for the source URL of the capture
+        markdownText += article.content;
     }
     markdown = turndownService.turndown(markdownText + '<p>title: pageTitlePlaceHolder<br>source: urlPlaceholder</p>');
     //The turndown service escapes any markdown characters in the URL and breaks the link so add the url after markdown coversion
