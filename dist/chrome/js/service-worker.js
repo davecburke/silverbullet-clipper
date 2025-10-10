@@ -177,10 +177,11 @@ async function hasDocument() {
 
 /* Send the markdown to the Silverbullet endpoint */
 function sendCaptureToEndpoint(markdown, title) {
-    chrome.storage.sync.get(["hostURL", "token", "directory"], (items) => {
+    chrome.storage.sync.get(["hostURL", "token", "directory", "useSilverBulletV1API"], (items) => {
         items.directory = (items.directory == null)?'Inbox':items.directory;
-        const link = items.hostURL + '/' + items.directory + '/' + getDateStamp(new Date()) + '/' + encodeURI(title);
-        const endpoint = link + '.md';
+        const pageLink = items.hostURL + '/' + items.directory + '/' + getDateStamp(new Date()) + '/' + encodeURI(title);
+        const apiLink = items.hostURL + (!items.useSilverBulletV1API ? '/.fs/' : '/') + items.directory + '/' + getDateStamp(new Date()) + '/' + encodeURI(title);
+        const endpoint = apiLink + '.md';
         const requestOptions = {
             method: 'PUT',
             headers: {
@@ -198,7 +199,7 @@ function sendCaptureToEndpoint(markdown, title) {
                 chrome.runtime.sendMessage({
                     type: 'link',
                     target: 'popup',
-                    url: link
+                    url: pageLink
                 });
             }
         })

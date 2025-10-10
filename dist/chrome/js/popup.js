@@ -33,10 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const token = document.getElementById("token").value;
         const directory = document.getElementById('directory').value;
         const appendPageTitleDefault = document.getElementById('append-page-title-default').checked;
+        const useSilverBulletV1API = document.getElementById('use-silverbullet-v1-api').checked;
         const saveMetadataAsFrontmatterDefault = document.getElementById('save-metadata-as-frontmatter-default').checked;
         const maxTitleLength = document.getElementById("max-title-length").value;
         const defaultTags = document.getElementById("default-tags").value;
-        chrome.storage.sync.set({ "hostURL": hostURL, "token": token, "directory": directory, "appendPageTitleDefault": appendPageTitleDefault, "maxTitleLength": maxTitleLength, "saveMetadataAsFrontmatterDefault": saveMetadataAsFrontmatterDefault, "defaultTags": defaultTags }, () => {
+        chrome.storage.sync.set({ "hostURL": hostURL, "token": token, "directory": directory, "appendPageTitleDefault": appendPageTitleDefault, "maxTitleLength": maxTitleLength, "saveMetadataAsFrontmatterDefault": saveMetadataAsFrontmatterDefault, "defaultTags": defaultTags, "useSilverBulletV1API": useSilverBulletV1API }, () => {
             hideConfigure();
             showCapture();
             document.getElementById('append-page-title').checked = appendPageTitleDefault;
@@ -71,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     displayTitle();
     //Prompt to provide credentials if they are missing
-    chrome.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault", "saveMetadataAsFrontmatterDefault", "defaultTags"]).then(items => {
+    chrome.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault", "saveMetadataAsFrontmatterDefault", "defaultTags", "useSilverBulletV1API"]).then(items => {
         if(items === null || items.hostURL === null || items.hostURL === '' || items.directory === null || items.directory === '') 
         {
             hideCapture();
@@ -99,11 +100,12 @@ function showConfigure() {
         configure.classList.remove("hidden");
     }
     //Get the hostURL and token from storage
-    chrome.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault", "maxTitleLength", "saveMetadataAsFrontmatterDefault", "defaultTags"], (items) => {
+    chrome.storage.sync.get(["hostURL", "token", "directory", "appendPageTitleDefault", "maxTitleLength", "saveMetadataAsFrontmatterDefault", "defaultTags", "useSilverBulletV1API"], (items) => {
         document.getElementById('hostURL').value = items?.hostURL || '';
         document.getElementById('token').value = items?.token || '';
         document.getElementById('directory').value = items.directory || 'Inbox';
         document.getElementById('append-page-title-default').checked = items.appendPageTitleDefault;
+        document.getElementById('use-silverbullet-v1-api').checked = items.useSilverBulletV1API;
         document.getElementById('save-metadata-as-frontmatter-default').checked = items.saveMetadataAsFrontmatterDefault;
         document.getElementById('max-title-length').value = items.maxTitleLength || '70';
         document.getElementById('default-tags').value = items.defaultTags || '';

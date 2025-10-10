@@ -59,6 +59,7 @@ function convertToMarkdown(htmlString, url, title, pageTitle, tags, saveMetadata
     //The turndown service escapes any markdown characters in the URL and breaks the link so add the url after markdown coversion
     markdown = markdown.replace("urlPlaceholder", url);
     markdown = markdown.replace("pageTitlePlaceHolder", pageTitle);
+    markdown = fixMarkdownImageUrls(markdown);
     //Add frontmatter if wanted
     if(saveMetadataAsFrontmatter) {
         markdown = frontmatter + '\n' + '---' + '\n\n' + markdown;
@@ -70,6 +71,26 @@ function convertToMarkdown(htmlString, url, title, pageTitle, tags, saveMetadata
         title
     );
 }
+
+function fixMarkdownImageUrls(markdown) {
+    // Matches: ![alt](url "optional title")
+    // - Group 1: alt text
+    // - Group 2: the raw URL (http/https), without surrounding <>.
+    // - Group 3: optional title part (incl. leading whitespace)
+    const imgRegex = /!\[([^\]]*)\]\(\s*<?(https?:\/\/[^)\s>]+)>?(\s+(?:"[^"]*"|'[^']*'|\([^)]+\)))?\s*\)/g;
+
+    return markdown.replace(imgRegex, (match, alt, url, titlePart = '') => {
+        // If URL already ends with a known image extension (before ? or #), leave it.
+        if (/\.(jpg|jpeg|png|gif|webp|svg|avif)(?=[$?#])/i.test(url) || /\.(jpg|jpeg|png|gif|webp|svg|avif)$/i.test(url)) {
+            return match;
+        }
+        // Append .jpg before any query/hash
+        const fixedUrl = url.replace(/(?=(\?|#|$))/, '.jpg');
+        return `![${alt}](${fixedUrl}${titlePart || ''})`;
+    });
+}
+
+
 
 /* Get the current date stamp */
 function getDateStamp(date) {
